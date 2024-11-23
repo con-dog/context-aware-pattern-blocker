@@ -123,6 +123,47 @@
     .pattern-item {
       padding: 3px 0;
     }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .button-group button {
+      flex: 1;
+      margin-top: 0;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-button {
+      width: 100%;
+      padding: 8px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .file-input-button:hover {
+      background: #1976D2;
+    }
   </style>
   </head>
   <body>
@@ -147,7 +188,13 @@
         label:social;elon musk<br>
         label:social;elon`[^a-zA-Z0-9]*`musk
       </div>
-      <button id="saveButton">Save</button>
+      <div class="button-group">
+        <div class="file-input-wrapper">
+          <input type="file" id="importFile" accept=".txt">
+          <div class="file-input-button">Import Rules</div>
+        </div>
+        <button id="saveButton">Save</button>
+      </div>
     </div>
 
     <div id="categories" class="tab-content">

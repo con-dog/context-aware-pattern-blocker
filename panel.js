@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const textarea = document.getElementById('patternList');
   const saveButton = document.getElementById('saveButton');
+  const importFile = document.getElementById('importFile');
   const categoryList = document.getElementById('categoryList');
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -18,6 +19,51 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCategoryView();
       }
     });
+  });
+
+  importFile.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const content = e.target.result;
+
+      // Process the imported content
+      const importedPatterns = content
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      // Merge with existing patterns
+      const existingPatterns = textarea.value
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+
+      // Combine patterns, remove duplicates, and sort
+      const mergedPatterns = [...new Set([...existingPatterns, ...importedPatterns])]
+        .sort((a, b) => a.localeCompare(b));
+
+      // Update textarea
+      textarea.value = mergedPatterns.join('\n');
+
+      // Clear the file input
+      event.target.value = '';
+
+      // Update the category view if we're on that tab
+      if (document.querySelector('.tab[data-tab="categories"]').classList.contains('active')) {
+        updateCategoryView();
+      }
+    };
+
+    reader.onerror = (error) => {
+      console.error('Error reading file:', error);
+      alert('Error reading file. Please try again.');
+    };
+
+    reader.readAsText(file);
   });
 
   // Load existing patterns
