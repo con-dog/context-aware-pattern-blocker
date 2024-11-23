@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Word blocker - Open source",
+  "version": "1.0",
+  "description": "Replaces specified words and patterns with block characters.",
+  "permissions": ["sidePanel", "storage"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["utils.js", "content.js"]
+    }
+  ],
+  "side_panel": {
+    "default_path": "side_panel.html"
+  },
+  "action": {
+    "default_title": "Click to open panel"
+  }
+}
