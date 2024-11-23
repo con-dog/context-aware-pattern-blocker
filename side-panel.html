@@ -130,14 +130,14 @@
       margin-top: 10px;
     }
 
-    .button-group button {
+    .button-group button,
+    .button-group .file-input-wrapper {
       flex: 1;
       margin-top: 0;
     }
 
     .file-input-wrapper {
       position: relative;
-      flex: 1;
     }
 
     .file-input-wrapper input[type="file"] {
@@ -163,6 +163,14 @@
 
     .file-input-button:hover {
       background: #1976D2;
+    }
+
+    .export-button {
+      background: #FF9800;
+    }
+
+    .export-button:hover {
+      background: #F57C00;
     }
   </style>
   </head>
@@ -193,8 +201,10 @@
           <input type="file" id="importFile" accept=".txt">
           <div class="file-input-button">Import Rules</div>
         </div>
-        <button id="saveButton">Save</button>
+        <button id="exportButton" class="file-input-button export-button">Export
+          Rules</button>
       </div>
+      <button id="saveButton">Save</button>
     </div>
 
     <div id="categories" class="tab-content">

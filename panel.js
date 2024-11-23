@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const textarea = document.getElementById('patternList');
   const saveButton = document.getElementById('saveButton');
   const importFile = document.getElementById('importFile');
+  const exportButton = document.getElementById('exportButton');
   const categoryList = document.getElementById('categoryList');
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -21,6 +22,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Handle file export
+  exportButton.addEventListener('click', () => {
+    const patterns = textarea.value
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .join('\n');
+
+    // Create blob and download link
+    const blob = new Blob([patterns], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = 'word-blocker-rules.txt';
+
+    // Trigger download
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+
+    // Clean up
+    URL.revokeObjectURL(url);
+  });
+
+  // Handle file import
   importFile.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (!file) return;
