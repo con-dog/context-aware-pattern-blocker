@@ -1,8 +1,21 @@
 let blockPatterns = [];
+let blockCount = 0;
+
+function updateBadgeCount() {
+  chrome.runtime.sendMessage({
+    type: 'updateBadge',
+    count: blockCount
+  });
+}
 
 function replaceWithBlocks(text, pattern) {
   try {
     const regex = new RegExp(pattern, 'gi');
+    const matches = text.match(regex);
+    if (matches) {
+      blockCount += matches.length;
+      updateBadgeCount();
+    }
     return text.replace(regex, match => '█'.repeat(match.length));
   } catch (e) {
     console.error('Invalid regex pattern:', pattern, e);
@@ -33,9 +46,25 @@ function processNode(node) {
   }
 }
 
+// Reset counter when page changes
+function resetCounter() {
+  blockCount = 0;
+  updateBadgeCount();
+}
+
+// Listen for page changes
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    resetCounter();
+    processNode(document.body);
+  }
+});
+
+// Initialize
 chrome.storage.sync.get(['blockPatterns'], (result) => {
   if (result.blockPatterns) {
     blockPatterns = result.blockPatterns;
+    resetCounter();
     processNode(document.body);
 
     const observer = new MutationObserver((mutations) => {
