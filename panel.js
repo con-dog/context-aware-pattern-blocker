@@ -1,11 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
   const textarea = document.getElementById('patternList');
+  const textareaMirror = document.getElementById('textareaMirror');
   const saveButton = document.getElementById('saveButton');
   const importFile = document.getElementById('importFile');
   const exportButton = document.getElementById('exportButton');
   const categoryList = document.getElementById('categoryList');
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
+
+  // Copy textarea styles to mirror
+  const copyStyles = () => {
+    const textareaStyles = window.getComputedStyle(textarea);
+    [
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'lineHeight',
+      'padding',
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'paddingLeft',
+      'border',
+      'borderWidth',
+      'borderStyle',
+      'boxSizing',
+      'whiteSpace',
+      'wordWrap',
+      'wordBreak',
+      'overflowWrap',
+    ].forEach((style) => {
+      textareaMirror.style[style] = textareaStyles[style];
+    });
+  };
+
+  function updateMirror() {
+    const blocks = [...textarea.value].map(char => {
+        if (char === '\n') return '\n';
+        return String.fromCharCode(9608);
+    }).join('');
+    textareaMirror.textContent = blocks;
+  };
 
   // Tab switching
   tabs.forEach(tab => {
@@ -157,6 +192,18 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  window.addEventListener('resize', copyStyles);
+
+  textarea.addEventListener('input', () => {
+    updateMirror();
+  });
+
+  textarea.addEventListener('scroll', () => {
+    textareaMirror.scrollTop = textarea.scrollTop;
+  });
+
+  copyStyles();
 
   // Initial load
   loadPatterns();
