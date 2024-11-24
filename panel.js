@@ -172,6 +172,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function cleanRegexPattern(pattern) {
+    pattern = pattern.trim();
+
+    // Handle variant 1: \b word boundaries
+    if (pattern.startsWith('\\b') && pattern.endsWith('\\b')) {
+        return pattern.slice(2, -2);
+    }
+
+    // Handle variant 2: non-capturing groups (?:...)
+    if (pattern.startsWith('(?:') && pattern.endsWith(')')) {
+        return `\`${pattern.slice(3, -1)}\``;
+    }
+
+    // Return original if no known variants match
+    return pattern;
+}
+
   // Update category view
   function updateCategoryView() {
     const patterns = textarea.value
@@ -197,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category.innerHTML = `
         <div class="category-name">${label} (${patterns.length})</div>
         <div class="pattern-list">
-          ${patterns.map(p => `<div class="pattern-item">${p}</div>`).join('')}
+          ${patterns.map(p => `<div class="pattern-item">${cleanRegexPattern(p)}</div>`).join('')}
         </div>
       `;
       categoryList.appendChild(category);
