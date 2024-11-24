@@ -14,7 +14,8 @@
     <div id="editor" class="tab-content active">
       <p>Enter words or patterns to block (one per line):</p>
       <div class="container">
-        <textarea id="patternList" spellcheck="false"></textarea>
+        <textarea id="patternList" spellcheck="false"
+          placeholder="Add words or patterns here..."></textarea>
         <div id="textareaMirror"></div>
       </div>
       <div class="help">
@@ -25,8 +26,9 @@
         <br>
         Examples:<br>
         elon musk<br>
-        label:social;elon musk<br>
-        label:social;elon`[^a-zA-Z0-9]*`musk
+        `(elon|musk|elon musk)*`<br>
+        label:people;elon musk<br>
+        label:people;`elon (musk)*`
       </div>
       <div class="button-group">
         <div class="file-input-wrapper">
