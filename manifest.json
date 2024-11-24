@@ -3,7 +3,7 @@
   "name": "Word Blocker - Text Redaction & Pattern Filter",
   "short_name": "Word Blocker",
   "version": "1.11",
-  "description": "Redact text on any site using custom patterns and regex filters. Block words, phrases, or patterns. Open source. Privacy focused.",
+  "description": "Redact text on any site. Block words, phrases, or patterns. Categorize rules. Import & export rules. Open source. Privacy focused.",
   "permissions": ["sidePanel", "storage"],
   "background": {
     "service_worker": "service-worker.js"
