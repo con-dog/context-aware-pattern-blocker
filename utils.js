@@ -26,7 +26,7 @@ function parsePatternString(str) {
     // and using positive lookahead to ensure there's at least one character
     return `${escapeRegExp(pre)}(?:${middle})${escapeRegExp(post)}`;
   }
-  return `${escapeRegExp(str)}`;
+  return `\\b${escapeRegExp(str)}\\b`;
 }
 
 function replaceWithBlocks(text, pattern) {
