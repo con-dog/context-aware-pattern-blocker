@@ -98,6 +98,7 @@
       font-family: monospace;
       color: transparent;
       opacity: 0.5;
+      overflow-y: scroll;
     }
 
     button {
@@ -112,10 +113,19 @@
       flex-shrink: 0;
     }
 
-    button:hover {
+    button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    button:hover:not(:disabled) {
       background: #45a049;
     }
 
+    button:disabled:hover {
+      background: #cccccc;
+    }
     .help {
       font-size: 1em;
       color: #666;

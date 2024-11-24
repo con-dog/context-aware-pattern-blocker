@@ -8,6 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
 
+  let hasValidationErrors = false;
+
+  const updateSaveButtonState = () => {
+    saveButton.disabled = hasValidationErrors;
+    saveButton.title = hasValidationErrors ? 'Fix validation errors before saving' : 'Save patterns';
+  };
+
   const validateLine = (line) => {
     try {
         if (!line.trim()) return true;
@@ -47,10 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateMirror() {
     const lines = textarea.value.split('\n');
+    let foundErrors = false;
 
     // Create spans for each line with appropriate color
     const coloredLines = lines.map(line => {
         const isValid = validateLine(line);
+        if (!isValid) foundErrors = true;
         const color = isValid ? 'transparent' : '#ff6b6b';
 
         const blocks = [...line].map(char => {
@@ -62,6 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }).join('\n');
 
     textareaMirror.innerHTML = coloredLines;
+
+    // Update validation state and save button
+    hasValidationErrors = foundErrors;
+    updateSaveButtonState();
   };
 
   // Tab switching
@@ -226,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   copyStyles();
+  updateSaveButtonState();
 
   // Initial load
   loadPatterns();
