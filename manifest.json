@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Word Blocker - Text Redaction & Pattern Filter",
-  "version": "1.0",
+  "version": "1.11",
   "description": "Redact text on any site using custom patterns and regex filters. Block words, phrases, or patterns. Open source. Privacy focused.",
   "permissions": ["sidePanel", "storage"],
   "background": {
