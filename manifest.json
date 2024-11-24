@@ -1,6 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Word Blocker - Text Redaction & Pattern Filter",
+  "short_name": "Word Blocker",
   "version": "1.11",
   "description": "Redact text on any site using custom patterns and regex filters. Block words, phrases, or patterns. Open source. Privacy focused.",
   "permissions": ["sidePanel", "storage"],
@@ -24,5 +25,6 @@
     "32": "./icon.png",
     "48": "./icon.png",
     "128": "./icon.png"
-  }
+  },
+  "minimum_chrome_version": "116"
 }
