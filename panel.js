@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.tab');
   const tabContents = document.querySelectorAll('.tab-content');
 
+  const validateLine = (line) => {
+    try {
+        if (!line.trim()) return true;
+        const parsed = parseBlockPattern(line.trim());
+        new RegExp(parsed.pattern, 'gi');
+        return true;
+    } catch (e) {
+        return false;
+    }
+  };
+
   // Copy textarea styles to mirror
   const copyStyles = () => {
     const textareaStyles = window.getComputedStyle(textarea);
@@ -35,11 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function updateMirror() {
-    const blocks = [...textarea.value].map(char => {
-        if (char === '\n') return '\n';
-        return String.fromCharCode(9608);
-    }).join('');
-    textareaMirror.textContent = blocks;
+    const lines = textarea.value.split('\n');
+
+    // Create spans for each line with appropriate color
+    const coloredLines = lines.map(line => {
+        const isValid = validateLine(line);
+        const color = isValid ? 'transparent' : '#ff6b6b';
+
+        const blocks = [...line].map(char => {
+            if (char === '\n') return '\n';
+            return String.fromCharCode(9608);
+        }).join('');
+
+        return `<span style="color: ${color}">${blocks}</span>`;
+    }).join('\n');
+
+    textareaMirror.innerHTML = coloredLines;
   };
 
   // Tab switching
