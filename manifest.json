@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Word blocker - Open source",
+  "name": "Word Blocker - Text Redaction & Pattern Filter",
   "version": "1.0",
-  "description": "Replaces specified words and patterns with block characters.",
+  "description": "Redact text on any site using custom patterns and regex filters. Block words, phrases, or patterns. Open source. Privacy focused.",
   "permissions": ["sidePanel", "storage"],
   "background": {
     "service_worker": "service-worker.js"
@@ -17,7 +17,7 @@
     "default_path": "side-panel.html"
   },
   "action": {
-    "default_title": "Click to open panel"
+    "default_title": "Word Blocker - Open Source"
   },
   "icons": {
     "16": "./icon.png",
