@@ -62,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isValid) foundErrors = true;
         const color = isValid ? 'transparent' : '#ff6b6b';
 
-        const blocks = [...line].map(char => {
+        // Ensure even empty lines have content for proper spacing
+        const blocks = line.length === 0 ? ' ' : [...line].map(char => {
             if (char === '\n') return '\n';
             return String.fromCharCode(9608);
         }).join('');
@@ -72,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     textareaMirror.innerHTML = coloredLines;
 
-    // Update validation state and save button
     hasValidationErrors = foundErrors;
     updateSaveButtonState();
   };
