@@ -72,28 +72,42 @@ h3 {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: visible;
+  overflow: scrolling;
+}
+
+/* Create a table wrapper for scrolling */
+.table-wrapper {
+  width: 100%;
+  overflow: scrolling;
+  max-height: 400px; /* Adjust this value based on your needs */
+  position: relative; /* For proper stacking context */
+  border: 1px solid #ddd; /* Optional: adds border around the entire table area */
 }
 
 .rules-table {
   width: 100%;
   border-collapse: separate; /* Changed from collapse to allow for spacing */
   border-spacing: 0;
-  margin-bottom: 10px;
+  margin-bottom: 0;
 }
 
+/* Style the header */
 .rules-table thead {
-  position: relative;
-  z-index: 1;
+  position: sticky;
+  top: 0;
+  z-index: 2; /* Above the tbody but below tooltips */
+  background: #f5f5f5; /* Match your existing header background */
 }
 
+/* Add bottom border to header cells */
 .rules-table th {
   background-color: #f5f5f5;
   font-weight: bold;
   padding: 12px 8px;
   position: relative;
   white-space: nowrap;
-  vertical-align: top; /* Align content to top */
+  vertical-align: top;
+  border-bottom: 2px solid #ddd; /* Visible separator for frozen header */
 }
 
 .rules-table th,
@@ -103,12 +117,37 @@ h3 {
   text-align: left;
 }
 
+/* Style table cells */
+.rules-table td {
+  background: white; /* Ensure content rows have white background */
+}
+
 .rules-table tr:nth-child(even) {
   background-color: #fafafa;
 }
 
 .rules-table tr:hover {
   background-color: #f0f0f0;
+}
+
+/* Table row hover effect */
+.rules-table tbody tr:hover {
+  background-color: #f8f8f8;
+}
+
+/* Optional: Add shadow to frozen header */
+.rules-table thead::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 3px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .rule-input {
@@ -195,7 +234,7 @@ h3 {
   font-size: 14px;
   font-weight: normal;
   white-space: normal;
-  z-index: 1000;
+  z-index: 3;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   width: max-content;
   max-width: 250px;
@@ -211,7 +250,7 @@ h3 {
   border: 4px solid transparent;
   border-top-color: #333;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 3;
 }
 
 /* Left side tooltips */

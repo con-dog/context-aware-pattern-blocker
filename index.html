@@ -14,114 +14,124 @@
     <div id="editor" class="tab-content active">
       <p>What should we block?</p>
       <div class="container">
-        <table class="rules-table">
-          <thead>
-            <tr>
-              <th>
-                <div class="th-content">
-                  Name
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="Give your rule a memorable name - it doesn't need to be unique. Use something that helps you remember what this rule does."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>
-                <div class="th-content">
-                  Description
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="Add helpful details about what this rule blocks and why. This will help you remember the rule's purpose later."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>
-                <div class="th-content">
-                  Block Pattern
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="Enter a regular expression (regex) pattern to match text you want to block. The pattern will be applied to all supported websites."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>
-                <div class="th-content">
-                  Block Mode
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="'Matching' only blocks the exact matched text. 'Surrounding' blocks the entire sentence or paragraph containing the match."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>
-                <div class="th-content">
-                  Block Contexts
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="Enter comma-separated contexts for when this rule should be applied (e.g., 'alcohol, politics, war'). Required for AI features."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>
-                <div class="th-content">
-                  Category
-                  <span
-                    class="tooltip-trigger"
-                    data-tooltip="Group similar rules together (e.g., 'Social' for people-related blocks, 'Politics' for political content). Helps organize your rules."
-                    >?</span
-                  >
-                </div>
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="rulesTableBody">
-            <!-- Example row -->
-            <tr>
-              <td>
-                <input type="text" class="rule-input" placeholder="Rule name" />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="rule-input"
-                  placeholder="Description"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="rule-input"
-                  placeholder="RegEx or text pattern"
-                />
-              </td>
-              <td>
-                <select class="rule-select">
-                  <option value="matching">Matching</option>
-                  <option value="surrounding">Surrounding</option>
-                </select>
-              </td>
-              <td>
-                <input
-                  type="text"
-                  class="rule-input"
-                  placeholder="context1, context2"
-                />
-              </td>
-              <td>
-                <input type="text" class="rule-input" placeholder="Category" />
-              </td>
-              <td>
-                <button class="delete-rule">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-wrapper">
+          <table class="rules-table">
+            <thead>
+              <tr>
+                <th>
+                  <div class="th-content">
+                    Name
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="Give your rule a memorable name - it doesn't need to be unique. Use something that helps you remember what this rule does."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>
+                  <div class="th-content">
+                    Description
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="Add helpful details about what this rule blocks and why. This will help you remember the rule's purpose later."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>
+                  <div class="th-content">
+                    Block Pattern
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="Enter a regular expression (regex) pattern to match text you want to block. The pattern will be applied to all supported websites."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>
+                  <div class="th-content">
+                    Block Mode
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="'Matching' only blocks the exact matched text. 'Surrounding' blocks the entire sentence or paragraph containing the match."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>
+                  <div class="th-content">
+                    Block Contexts
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="Enter comma-separated contexts for when this rule should be applied (e.g., 'alcohol, politics, war'). Required for AI features."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>
+                  <div class="th-content">
+                    Category
+                    <span
+                      class="tooltip-trigger"
+                      data-tooltip="Group similar rules together (e.g., 'Social' for people-related blocks, 'Politics' for political content). Helps organize your rules."
+                      >?</span
+                    >
+                  </div>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rulesTableBody">
+              <!-- Example row -->
+              <tr>
+                <td>
+                  <input
+                    type="text"
+                    class="rule-input"
+                    placeholder="Rule name"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="rule-input"
+                    placeholder="Description"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="rule-input"
+                    placeholder="RegEx or text pattern"
+                  />
+                </td>
+                <td>
+                  <select class="rule-select">
+                    <option value="matching">Matching</option>
+                    <option value="surrounding">Surrounding</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="rule-input"
+                    placeholder="context1, context2"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    class="rule-input"
+                    placeholder="Category"
+                  />
+                </td>
+                <td>
+                  <button class="delete-rule">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <button id="addRule" class="add-rule">Add New Rule</button>
       </div>
       <div class="help">
