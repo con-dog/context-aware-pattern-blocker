@@ -24,19 +24,19 @@
   height: 100%;
 }
 
-#editor.tab-content.active {
+#rules.tab-content.active {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
 }
 
-#editor p {
+#rules p {
   margin: 0 0 10px 0;
   flex-shrink: 0;
 }
 
-#categories.tab-content.active {
+#todo.tab-content.active {
   display: block;
   flex: 1;
   overflow: auto;

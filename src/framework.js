@@ -4,30 +4,89 @@
  * @returns {Element} The enhanced element
  */
 export function enhanceElement(element) {
+  // Query methods with 'this' context
   if (!element.$) {
     element.$ = function (selector) {
-      // If called as method, use this as parent
-      return $(selector, this);
+      return $(this, selector);
     };
   }
 
   if (!element.$$) {
     element.$$ = function (selector) {
-      // If called as method, use this as parent
-      return $$(selector, this);
+      return $$(this, selector);
     };
   }
 
   if (!element.$id) {
     element.$id = function (id) {
-      // If called as method, use this as parent
-      return $id(id, this);
+      return $id(this, id);
     };
   }
 
-  if (!element.$listener) {
-    element.$listener = function (event, handler) {
+  // Event listener with chainable return
+  if (!element.$el) {
+    element.$el = function (event, handler) {
       this.addEventListener(event, handler);
+      return this;
+    };
+  }
+
+  // Convenience methods for DOM manipulation
+  if (!element.$append) {
+    element.$append = function (...items) {
+      this.append(...items);
+      return this;
+    };
+  }
+
+  if (!element.$insert) {
+    element.$insert = function (...items) {
+      this.insertBefore(...items);
+      return this;
+    };
+  }
+
+  if (!element.$attr) {
+    element.$attr = function (name, value) {
+      if (value === undefined) {
+        return this.getAttribute(name);
+      }
+      this.setAttribute(name, value);
+      return this;
+    };
+  }
+
+  if (!element.$class) {
+    element.$class = function (...classNames) {
+      this.classList.add(...classNames);
+      return this;
+    };
+  }
+
+  if (!element.$removeClass) {
+    element.$removeClass = function (...classNames) {
+      this.classList.remove(...classNames);
+      return this;
+    };
+  }
+
+  if (!element.$toggleClass) {
+    element.$toggleClass = function (className, force) {
+      this.classList.toggle(className, force);
+      return this;
+    };
+  }
+
+  if (!element.$html) {
+    element.$html = function (content) {
+      this.innerHTML = content;
+      return this;
+    };
+  }
+
+  if (!element.$text) {
+    element.$text = function (content) {
+      this.textContent = content;
       return this;
     };
   }
@@ -36,104 +95,90 @@ export function enhanceElement(element) {
 }
 
 /**
- * Queries the DOM for a single element using CSS selectors, with flexible parent targeting.
- * @param {...args} args - (selector: string) or (parent: Element, selector: string)
- * @returns {Element} Enhanced element with $ and $$ methods
+ * Queries the DOM for a single element using CSS selectors
+ * @param {Element|string} first - Parent element or selector if only one argument
+ * @param {string} [second] - Selector if parent is provided
+ * @returns {Element|null} Enhanced element with utility methods or null if not found
  */
 export function $(...args) {
-  // If called as a method (this is an Element), use it as parent
-  const isMethod = this instanceof Element;
+  let parent, selector;
 
-  // If it's a method call, treat single argument as selector
-  if (isMethod) {
-    const [selector] = args;
-    const element = this.querySelector(selector);
-    if (!element) {
-      throw new ElementNotFoundError(selector);
-    }
-    return enhanceElement(element);
+  if (args.length === 1) {
+    parent = document;
+    selector = args[0];
+  } else {
+    [parent, selector] = args;
   }
 
-  // Otherwise, use normal parent/selector logic
-  const [first, second] = args;
-  const parent = args.length > 1 ? first : document;
-  const selector = args.length > 1 ? second : first;
+  if (!(parent instanceof Element) && parent !== document) {
+    throw new Error("Invalid parent element provided to query selector");
+  }
 
   const element = parent.querySelector(selector);
-  if (!element) {
-    throw new ElementNotFoundError(selector);
-  }
-  return enhanceElement(element);
+  return element ? enhanceElement(element) : null;
 }
 
 /**
- * Queries the DOM for multiple elements using CSS selectors, with flexible parent targeting.
- * @param {...args} args - (selector: string) or (parent: Element, selector: string)
- * @returns {NodeList} Collection of enhanced elements with $ and $$ methods
+ * Queries the DOM for multiple elements using CSS selectors
+ * @param {Element|string} first - Parent element or selector if only one argument
+ * @param {string} [second] - Selector if parent is provided
+ * @returns {NodeList} Collection of enhanced elements
  */
 export function $$(...args) {
-  const isMethod = this instanceof Element;
+  let parent, selector;
 
-  if (isMethod) {
-    const [selector] = args;
-    const elements = this.querySelectorAll(selector);
-    if (!elements.length) {
-      throw new ElementNotFoundError(selector);
-    }
-    elements.forEach(enhanceElement);
-    return elements;
+  if (args.length === 1) {
+    parent = document;
+    selector = args[0];
+  } else {
+    [parent, selector] = args;
   }
 
-  const [first, second] = args;
-  const parent = args.length > 1 ? first : document;
-  const selector = args.length > 1 ? second : first;
+  if (!(parent instanceof Element) && parent !== document) {
+    throw new Error("Invalid parent element provided to query selector");
+  }
 
   const elements = parent.querySelectorAll(selector);
-  if (!elements.length) {
-    throw new ElementNotFoundError(selector);
-  }
   elements.forEach(enhanceElement);
   return elements;
 }
 
 /**
- * Queries the DOM for a single element by its id, with flexible parent targeting.
- * @param {...args} args - (id: string) or (parent: Element, id: string)
- * @returns {Element} Enhanced element with enhanced methods
+ * Queries the DOM for a single element by its id
+ * @param {Element|string} first - Parent element or ID if only one argument
+ * @param {string} [second] - ID if parent is provided
+ * @returns {Element|null} Enhanced element with utility methods or null if not found
  */
 export function $id(...args) {
-  const isMethod = this instanceof Element;
+  let parent, id;
 
-  if (isMethod) {
-    const [id] = args;
-    const element = this.querySelector(`#${id}`);
-    if (!element) {
-      throw new ElementNotFoundError(id);
-    }
-    return enhanceElement(element);
+  if (args.length === 1) {
+    parent = document;
+    id = args[0];
+  } else {
+    [parent, id] = args;
   }
 
-  const [first, second] = args;
-  const id = args.length > 1 ? second : first;
-  const parent = args.length > 1 ? first : document;
+  if (!(parent instanceof Element) && parent !== document) {
+    throw new Error("Invalid parent element provided to ID selector");
+  }
 
   const element =
     parent === document
       ? document.getElementById(id)
       : parent.querySelector(`#${id}`);
 
-  if (!element) {
-    throw new ElementNotFoundError(id);
-  }
-  return enhanceElement(element);
+  return element ? enhanceElement(element) : null;
 }
 
 /**
- * Adds an event listener to an element or document., with flexible parent targeting.
- * @param {...args} args - (event: string, handler: Function) or (target: Element, event: string, handler: Function)
- * @returns {Element} Returns enhanced target element for chaining.
+ * Adds an event listener to an element or document
+ * @param {Element|string} first - Target element or event name if only document
+ * @param {string|Function} second - Event name or handler if target provided
+ * @param {Function} [third] - Handler if target and event provided
+ * @returns {Element} Returns enhanced target element for chaining
  */
-export function $listener(...args) {
+export function $el(...args) {
   let target, event, handler;
 
   if (args.length === 2) {
@@ -143,7 +188,41 @@ export function $listener(...args) {
     [target, event, handler] = args;
   }
 
-  target.addEventListener(event, handler);
+  if (!(target instanceof Element) && target !== document) {
+    throw new Error("Invalid target element provided for event listener");
+  }
 
+  target.addEventListener(event, handler);
   return target === document ? target : enhanceElement(target);
+}
+
+/**
+ * Creates and enhances a new DOM element
+ * @param {string} tag - HTML tag name
+ * @param {Object} [options] - Optional attributes and properties
+ * @param {string|Element|Array} [children] - String content, Element, or Array of children
+ * @returns {Element} Enhanced element with utility methods
+ */
+export function $ce(tag, options = {}, children = null) {
+  const element = document.createElement(tag);
+
+  Object.entries(options).forEach(([key, value]) => {
+    if (key.startsWith("on") && typeof value === "function") {
+      element.addEventListener(key.slice(2), value);
+    } else {
+      element.setAttribute(key, value);
+    }
+  });
+
+  if (children) {
+    if (Array.isArray(children)) {
+      element.append(...children);
+    } else if (children instanceof Element) {
+      element.appendChild(children);
+    } else {
+      element.textContent = String(children);
+    }
+  }
+
+  return enhanceElement(element);
 }
