@@ -170,8 +170,7 @@ h3 {
   content: attr(data-tooltip);
   position: absolute;
   top: 0;
-  /* transform: translateY(-100%) translateX(-50%); */
-  left: 100%;
+  right: 100%;
   padding: 8px 12px;
   background-color: #333;
   color: white;
@@ -189,7 +188,7 @@ h3 {
 /* Left side tooltips */
 .rules-table th:first-child .tooltip-trigger:hover::before,
 .rules-table th:nth-child(2) .tooltip-trigger:hover::before {
-  left: 0;
+  left: 100%;
 }
 
 .rules-table th:first-child .tooltip-trigger:hover::after,
@@ -201,7 +200,7 @@ h3 {
 .rules-table th:last-child .tooltip-trigger:hover::before,
 .rules-table th:nth-child(6) .tooltip-trigger:hover::before {
   left: auto;
-  right: 0;
+  right: 100%;
 }
 
 .rules-table th:last-child .tooltip-trigger:hover::after,
