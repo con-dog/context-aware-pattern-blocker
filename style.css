@@ -68,108 +68,73 @@ h3 {
 }
 
 .container {
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   position: relative;
-  overflow: visible; /* For tooltips */
-  min-height: 0; /* Critical for nested flex scrolling */
+  flex: 1;
+  min-height: 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-/* Create a table wrapper for scrolling */
 .table-wrapper {
-  width: 100%;
-  flex: 1;
-  overflow: auto;
-  position: relative; /* For proper stacking context */
-  border: 1px solid #ddd; /* Optional: adds border around the entire table area */
-  min-height: 0;
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .rules-table {
   width: 100%;
-  border-collapse: separate; /* Changed from collapse to allow for spacing */
+  border-collapse: separate;
   border-spacing: 0;
-  margin: 0;
+  table-layout: auto; /* Allow column widths to be determined by content */
 }
 
-/* Style the header */
+/* Handle sticky header */
 .rules-table thead {
   position: sticky;
   top: 0;
-  z-index: 2; /* Above the tbody but below tooltips */
-  background: #f5f5f5; /* Match your existing header background */
+  z-index: 2;
+  background: #f5f5f5;
 }
 
-/* Add bottom border to header cells */
-.rules-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
-  padding: 12px 8px;
-  position: relative;
-  white-space: nowrap;
-  vertical-align: top;
-  border-bottom: 2px solid #ddd; /* Visible separator for frozen header */
-}
-
+/* Make cells respect their content width */
 .rules-table th,
 .rules-table td {
   padding: 8px;
   border: 1px solid #ddd;
   text-align: left;
+  white-space: nowrap; /* Prevent wrapping to help with width calculation */
 }
 
-/* Style table cells */
+/* Ensure inputs don't force column widths */
 .rules-table td {
-  background: white; /* Ensure content rows have white background */
+  width: 1%; /* This helps distribute space evenly while respecting content */
 }
 
-.rules-table tr:nth-child(even) {
-  background-color: #fafafa;
+/* Header styles */
+.th-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
 }
 
-.rules-table tr:hover {
-  background-color: #f0f0f0;
-}
-
-/* Table row hover effect */
-.rules-table tbody tr:hover {
-  background-color: #f8f8f8;
-}
-
-/* Optional: Add shadow to frozen header */
-.rules-table thead::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 3px;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
-.rule-input {
-  width: 100%;
-  padding: 6px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
+/* Form element styles */
+.rule-input,
 .rule-select {
   width: 100%;
+  min-width: 100px; /* Minimum width to prevent too narrow columns */
   padding: 6px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
-  background-color: white;
 }
 
+/* Make the Block Mode select a reasonable width */
+.rule-select {
+  min-width: 120px;
+}
+
+/* Actions column styling */
 .delete-rule {
   background-color: #ff4444;
   color: white;
@@ -177,35 +142,12 @@ h3 {
   padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
-  margin: 0;
-  width: auto;
+  white-space: nowrap;
+  min-width: 80px;
 }
 
 .delete-rule:hover {
   background-color: #cc0000;
-}
-
-.add-rule {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-  width: auto;
-  align-self: flex-start;
-}
-
-.add-rule:hover {
-  background-color: #45a049;
-}
-
-.th-content {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  position: relative;
 }
 
 .tooltip-trigger {
@@ -228,8 +170,8 @@ h3 {
   content: attr(data-tooltip);
   position: absolute;
   top: 0;
-  transform: translateY(-100%) translateX(-50%);
-  left: 50%;
+  /* transform: translateY(-100%) translateX(-50%); */
+  left: 100%;
   padding: 8px 12px;
   background-color: #333;
   color: white;
@@ -244,28 +186,15 @@ h3 {
   margin-top: -8px;
 }
 
-/* Arrow for regular positioning */
-.tooltip-trigger:hover::after {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: 50%;
-  border: 4px solid transparent;
-  border-top-color: #333;
-  transform: translateX(-50%);
-  z-index: 3;
-}
-
 /* Left side tooltips */
 .rules-table th:first-child .tooltip-trigger:hover::before,
 .rules-table th:nth-child(2) .tooltip-trigger:hover::before {
   left: 0;
-  transform: translateY(-100%) translateX(0);
 }
 
 .rules-table th:first-child .tooltip-trigger:hover::after,
 .rules-table th:nth-child(2) .tooltip-trigger:hover::after {
-  left: 8px;
+  left: 100%;
 }
 
 /* Right side tooltips */
@@ -273,13 +202,12 @@ h3 {
 .rules-table th:nth-child(6) .tooltip-trigger:hover::before {
   left: auto;
   right: 0;
-  transform: translateY(-100%) translateX(0);
 }
 
 .rules-table th:last-child .tooltip-trigger:hover::after,
 .rules-table th:nth-child(6) .tooltip-trigger:hover::after {
   left: auto;
-  right: 8px;
+  right: 100%;
 }
 
 .tooltip-trigger::before,
@@ -293,25 +221,6 @@ h3 {
 .tooltip-trigger:hover::after {
   opacity: 1;
   pointer-events: auto;
-}
-
-.help {
-  font-size: 1em;
-  color: #666;
-  margin-top: 10px;
-  padding: 15px;
-  background: #f5f5f5;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.help ul {
-  margin: 10px 0 0 0;
-  padding-left: 20px;
-}
-
-.help li {
-  margin-bottom: 5px;
 }
 
 /* Ensure button group maintains its style */
