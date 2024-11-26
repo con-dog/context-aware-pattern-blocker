@@ -72,7 +72,7 @@ h3 {
   flex: 1;
   min-height: 0;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 0 0 4px 4px;
   display: flex;
   flex-direction: column;
 }
@@ -336,4 +336,10 @@ h3 {
 
 .export-button:hover {
   background: #f57c00;
+}
+
+/* Add a red asterisk to the header */
+.rules-table th:nth-child(3) .th-content::after {
+  content: " *";
+  color: #ef4444; /* Red color */
 }
