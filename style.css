@@ -343,3 +343,28 @@ h3 {
   content: " *";
   color: #ef4444; /* Red color */
 }
+
+.invalid-pattern {
+  background-color: #fef2f2;
+  border-color: #ef4444 !important;
+}
+
+.add-rule-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #9ca3af;
+  border-color: #9ca3af;
+}
+
+/* Optional: Add a tooltip for invalid patterns */
+.invalid-pattern:hover::after {
+  content: "Invalid regular expression pattern";
+  position: absolute;
+  background: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: -30px;
+  margin-left: 10px;
+}

@@ -33,9 +33,7 @@
             </svg>
             Add new rule
           </button>
-          <!-- You can add more toolbar items here if needed -->
         </div>
-        <!-- Right side of toolbar for future features like search, filter, etc. -->
       </div>
       <div class="container">
         <div class="table-wrapper">
@@ -106,73 +104,20 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>
-                  <input
-                    type="text"
-                    class="rule-input"
-                    placeholder="Rule name"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="rule-input"
-                    placeholder="Description"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="rule-input"
-                    placeholder="RegEx or text pattern"
-                  />
-                </td>
-                <td>
-                  <select class="rule-select">
-                    <option value="matching">Matching</option>
-                    <option value="surrounding">Surrounding</option>
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="rule-input"
-                    placeholder="context1, context2"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    class="rule-input"
-                    placeholder="Category"
-                  />
-                </td>
-                <td><button class="delete-rule">Delete</button></td>
-              </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <div class="button-group">
-        <div class="file-input-wrapper">
-          <input type="file" id="importFile" accept=".txt" />
-          <div class="file-input-button">Import Rules</div>
-        </div>
-        <button id="exportButton" class="file-input-button export-button">
-          Export Rules
-        </button>
-      </div>
-      <button id="saveButton">Save Changes</button>
-    </div>
 
     <div id="categories" class="tab-content">
       <div id="categoryList"></div>
     </div>
 
+    <script src="index.js"></script>
     <script src="table.js"></script>
-    <script src="utils.js"></script>
-    <script src="panel.js"></script>
+    <script src="regex.js"></script>
+    <script src="regex.validation.js"></script>
+
   </body>
 </html>
