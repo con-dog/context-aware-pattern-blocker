@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="./style.css" rel="stylesheet" />
+    <link href="./styles/general.css" rel="stylesheet" />
+    <link href="./styles/tabs.css" rel="stylesheet" />
+    <link href="./styles/table.css" rel="stylesheet" />
   </head>
   <body>
     <h1>Context Aware Word & Phrase Blocker</h1>
 
     <div class="tabs">
-      <div class="tab active" data-tab="editor">Editor</div>
-      <div class="tab" data-tab="categories">Categories</div>
+      <div class="tab active" data-tab="editor">Rules</div>
+      <div class="tab" data-tab="categories">TODO</div>
     </div>
 
     <div id="editor" class="tab-content active">
+
       <div class="table-toolbar">
         <div class="table-toolbar-left">
           <h2>Word & Phrase Blocking Rules</h2>
         </div>
-
         <div class="table-toolbar-right">
           <button class="add-rule-button">
             <svg
@@ -35,6 +37,7 @@
           </button>
         </div>
       </div>
+
       <div class="container">
         <div class="table-wrapper">
           <table class="rules-table">
@@ -109,15 +112,14 @@
         </div>
       </div>
 
-
     <div id="categories" class="tab-content">
       <div id="categoryList"></div>
     </div>
 
-    <script src="index.js"></script>
-    <script src="table.js"></script>
-    <script src="regex.js"></script>
-    <script src="regex.validation.js"></script>
+    <script src="./javascript/index.js"></script>
+    <script src="./javascript/table.js"></script>
+    <script src="./javascript/regex.js"></script>
+    <script src="./javascript/regex.validation.js"></script>
 
   </body>
 </html>
