@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Word Blocker - Text Redaction & Pattern Filter",
+  "name": "Context Aware Word & Phrase Blocker - AI Powered Text Redaction",
   "short_name": "Word Blocker",
   "version": "1.12",
   "description": "Redact text on any site. Block words, phrases, or patterns. Categorize rules. Import & export rules. Open source. Privacy focused.",
