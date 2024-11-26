@@ -53,6 +53,7 @@ h3 {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 0;
 }
 
 #categories.tab-content.active {
@@ -72,23 +73,25 @@ h3 {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: scrolling;
+  overflow: visible; /* For tooltips */
+  min-height: 0; /* Critical for nested flex scrolling */
 }
 
 /* Create a table wrapper for scrolling */
 .table-wrapper {
   width: 100%;
-  overflow: scrolling;
-  max-height: 400px; /* Adjust this value based on your needs */
+  flex: 1;
+  overflow: auto;
   position: relative; /* For proper stacking context */
   border: 1px solid #ddd; /* Optional: adds border around the entire table area */
+  min-height: 0;
 }
 
 .rules-table {
   width: 100%;
   border-collapse: separate; /* Changed from collapse to allow for spacing */
   border-spacing: 0;
-  margin-bottom: 0;
+  margin: 0;
 }
 
 /* Style the header */
