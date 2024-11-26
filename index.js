@@ -1,8 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const tabs = document.querySelectorAll(".tab");
-  const tabContents = document.querySelectorAll(".tab-content");
+import { $, $$ } from "./src/framework";
 
-  // Tab switching
+document.addEventListener("DOMContentLoaded", () => {
+  // const tabs = document.querySelectorAll(".tab");
+  const tabs = $$(".tab");
+  const tabContents = $$(".tab-content");
+
+  // Tab switching logic
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       tabs.forEach((t) => t.classList.remove("active"));
@@ -10,10 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       tab.classList.add("active");
       document.getElementById(tab.dataset.tab).classList.add("active");
-
-      if (tab.dataset.tab === "categories") {
-        updateCategoryView();
-      }
     });
   });
 
@@ -54,6 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //   );
   // });
 
-  // Initial load
-  loadPatterns();
+  // TODO: Initial load
+  // loadPatterns();
 });
