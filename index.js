@@ -1,58 +1,39 @@
-import { $, $$ } from "./src/framework";
+import { $, $listener, $id, $$, enhanceElement } from "./src/framework";
+import { loadRulesFromStorage } from "./src/storage";
 
-document.addEventListener("DOMContentLoaded", () => {
-  // const tabs = document.querySelectorAll(".tab");
+export function initializeTabSwitcher() {
   const tabs = $$(".tab");
   const tabContents = $$(".tab-content");
 
-  // Tab switching logic
   tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
+    tab = enhanceElement(tab);
+    $listener("click", () => {
       tabs.forEach((t) => t.classList.remove("active"));
       tabContents.forEach((c) => c.classList.remove("active"));
-
       tab.classList.add("active");
-      document.getElementById(tab.dataset.tab).classList.add("active");
+      $id(tab.dataset.tab).classList.add("active");
     });
   });
+}
 
-  // TODO: Load existing patterns
-  // function loadPatterns() {
-  //   chrome.storage.sync.get(['rawPatterns'], (result) => {
-  //     if (result.rawPatterns) {
-  //       textarea.value = result.rawPatterns.join('\n');
-  //       updateCategoryView();
-  //     }
-  //   });
-  // }
+function initializeAddRuleButton() {
+  $(".add-rule-button").$listener("click", () => {
+    const tbody = $(".rules-table tbody");
+    const newRow = enhanceElement(createRuleRow());
 
-  // TODO: Save patterns
-  // saveButton.addEventListener("click", () => {
-  //   const rawPatterns = textarea.value
-  //     .split("\n")
-  //     .map((line) => line.trim())
-  //     .filter((line) => line.length > 0);
+    if (tbody.firstChild) {
+      tbody.insertBefore(newRow, tbody.firstChild);
+    } else {
+      tbody.appendChild(newRow);
+    }
 
-  //   // Convert raw patterns to regex patterns with labels
-  //   const blockPatterns = rawPatterns.map(parseBlockPattern);
+    newRow.$("input").focus();
+  });
+}
 
-  //   // Save both raw patterns and processed patterns
-  //   chrome.storage.sync.set(
-  //     {
-  //       rawPatterns: rawPatterns,
-  //       blockPatterns: blockPatterns,
-  //     },
-  //     () => {
-  //       updateCategoryView();
-  //       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  //         if (tabs[0]) {
-  //           chrome.tabs.reload(tabs[0].id);
-  //         }
-  //       });
-  //     }
-  //   );
-  // });
-
+$listener("DOMContentLoaded", () => {
+  initializeTabSwitcher();
+  initializeAddRuleButton();
   // TODO: Initial load
-  // loadPatterns();
+  loadRulesFromStorage();
 });

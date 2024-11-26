@@ -45,22 +45,6 @@ function createRuleRow() {
   return tr;
 }
 
-// Add click handler to the Add Rule button
-document.querySelector(".add-rule-button").addEventListener("click", () => {
-  const tbody = document.querySelector(".rules-table tbody");
-  const newRow = createRuleRow();
-
-  // Insert at the beginning of the table
-  if (tbody.firstChild) {
-    tbody.insertBefore(newRow, tbody.firstChild);
-  } else {
-    tbody.appendChild(newRow);
-  }
-
-  // Optional: Focus the first input of the new row
-  newRow.querySelector("input").focus();
-});
-
 // Initialize validation on existing rows
 document.querySelectorAll(".rule-input[required]").forEach((input) => {
   validatePatternInput(input);
