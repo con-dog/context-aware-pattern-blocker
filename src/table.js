@@ -1,4 +1,5 @@
 import { $ce } from "./framework";
+import { isValidRegex, validatePatternInput } from "./regex";
 
 export function NameInput() {
   return `<input type="text" class="rule-input" placeholder="Rule name">`;
@@ -44,14 +45,11 @@ export function createRuleRow() {
     DeleteRuleButton(),
   ];
 
-  // Create and append each cell
   cells.forEach((cellHtml) => {
     const td = $ce("td");
-    td.innerHTML = cellHtml;
+    td.$html(cellHtml);
     tr.$append(td);
   });
-
-  console.log("createRuleRow");
 
   const patternInput = tr.$("input[required]");
   patternInput.$el("input", () => validatePatternInput(patternInput));
@@ -60,15 +58,12 @@ export function createRuleRow() {
   const deleteButton = tr.$(".delete-rule");
   deleteButton.$el("click", () => {
     tr.remove();
-    // Recheck all patterns after deletion
     const addButton = $(".add-rule-button");
     const allPatternsValid = Array.from($$(".rule-input[required]")).every(
       (input) => !input.value.trim() || isValidRegex(input.value.trim())
     );
     addButton.disabled = !allPatternsValid;
   });
-
-  console.log("createRuleRow", tr);
 
   return tr;
 }

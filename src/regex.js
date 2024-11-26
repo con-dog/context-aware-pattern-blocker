@@ -1,4 +1,4 @@
-function isValidRegex(pattern) {
+export function isValidRegex(pattern) {
   if (!pattern) return false;
   try {
     new RegExp(pattern);
@@ -8,7 +8,7 @@ function isValidRegex(pattern) {
   }
 }
 
-function validatePatternInput(input) {
+export function validatePatternInput(input) {
   const pattern = input.value.trim();
   const isValid = isValidRegex(pattern);
 

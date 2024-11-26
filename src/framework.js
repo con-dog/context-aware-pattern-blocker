@@ -1,95 +1,71 @@
 /**
  * Adds DOM querying and event utility methods to an element
  * @param {Element} element - DOM element to enhance
- * @returns {Element} The enhanced element
+ * @returns {EnhancedElement} The enhanced element
  */
 export function enhanceElement(element) {
-  // Query methods with 'this' context
-  if (!element.$) {
-    element.$ = function (selector) {
+  const methods = {
+    // Query methods
+    $: function (selector) {
       return $(this, selector);
-    };
-  }
-
-  if (!element.$$) {
-    element.$$ = function (selector) {
+    },
+    $$: function (selector) {
       return $$(this, selector);
-    };
-  }
-
-  if (!element.$id) {
-    element.$id = function (id) {
+    },
+    $id: function (id) {
       return $id(this, id);
-    };
-  }
+    },
 
-  // Event listener with chainable return
-  if (!element.$el) {
-    element.$el = function (event, handler) {
+    // Event method
+    $el: function (event, handler) {
       this.addEventListener(event, handler);
       return this;
-    };
-  }
+    },
 
-  // Convenience methods for DOM manipulation
-  if (!element.$append) {
-    element.$append = function (...items) {
+    // DOM manipulation methods
+    $append: function (...items) {
       this.append(...items);
       return this;
-    };
-  }
-
-  if (!element.$insert) {
-    element.$insert = function (...items) {
+    },
+    $insert: function (...items) {
       this.insertBefore(...items);
       return this;
-    };
-  }
-
-  if (!element.$attr) {
-    element.$attr = function (name, value) {
+    },
+    $attr: function (name, value) {
       if (value === undefined) {
         return this.getAttribute(name);
       }
       this.setAttribute(name, value);
       return this;
-    };
-  }
-
-  if (!element.$class) {
-    element.$class = function (...classNames) {
+    },
+    $class: function (...classNames) {
       this.classList.add(...classNames);
       return this;
-    };
-  }
-
-  if (!element.$removeClass) {
-    element.$removeClass = function (...classNames) {
+    },
+    $removeClass: function (...classNames) {
       this.classList.remove(...classNames);
       return this;
-    };
-  }
-
-  if (!element.$toggleClass) {
-    element.$toggleClass = function (className, force) {
+    },
+    $toggleClass: function (className, force) {
       this.classList.toggle(className, force);
       return this;
-    };
-  }
-
-  if (!element.$html) {
-    element.$html = function (content) {
+    },
+    $html: function (content) {
       this.innerHTML = content;
       return this;
-    };
-  }
-
-  if (!element.$text) {
-    element.$text = function (content) {
+    },
+    $text: function (content) {
       this.textContent = content;
       return this;
-    };
-  }
+    },
+  };
+
+  // Add all methods to the element if they don't exist
+  Object.entries(methods).forEach(([key, method]) => {
+    if (!element[key]) {
+      element[key] = method;
+    }
+  });
 
   return element;
 }
