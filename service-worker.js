@@ -4,15 +4,11 @@ chrome.action.setBadgeBackgroundColor({
 chrome.action.setBadgeTextColor({ color: '#FFFFFF' });
 
 chrome.action.onClicked.addListener(async (tab) => {
-  chrome.sidePanel.setOptions(
-    {
-      enabled: true,
-      path: 'side-panel.html',
-    },
-    () => {
-      chrome.sidePanel.open({windowId: tab.windowId});
-    }
-  );
+  const url = chrome.runtime.getURL('index.html');
+  chrome.tabs.create({
+    url: url,
+    active: true
+  });
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {

@@ -4,7 +4,7 @@
   "short_name": "Word Blocker",
   "version": "1.12",
   "description": "Redact text on any site. Block words, phrases, or patterns. Categorize rules. Import & export rules. Open source. Privacy focused.",
-  "permissions": ["sidePanel", "storage"],
+  "permissions": ["management", "storage", "tabs"],
   "background": {
     "service_worker": "service-worker.js"
   },
@@ -14,9 +14,6 @@
       "js": ["utils.js", "content.js"]
     }
   ],
-  "side_panel": {
-    "default_path": "side-panel.html"
-  },
   "action": {
     "default_title": "Word Blocker - Open Source"
   },
