@@ -1,206 +1,252 @@
 * {
-      box-sizing: border-box;
-    }
+  box-sizing: border-box;
+}
 
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      width: 100%;
-      padding: 15px;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-    }
+body {
+  width: 100%;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
 
-    h3 {
-      margin-top: 0;
-      flex-shrink: 0;
-    }
+h3 {
+  margin-top: 0;
+  flex-shrink: 0;
+}
 
-    .tabs {
-      display: flex;
-      margin-bottom: 15px;
-      border-bottom: 1px solid #ccc;
-      flex-shrink: 0;
-    }
+.tabs {
+  display: flex;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
+}
 
-    .tab {
-      padding: 8px 16px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      border-bottom: none;
-      margin-bottom: -1px;
-    }
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-bottom: none;
+  margin-bottom: -1px;
+}
 
-    .tab.active {
-      background: #fff;
-      border-color: #ccc;
-      border-bottom-color: #fff;
-    }
+.tab.active {
+  background: #fff;
+  border-color: #ccc;
+  border-bottom-color: #fff;
+}
 
-    .tab-content {
-      display: none;
-      height: 100%;
-    }
+.tab-content {
+  display: none;
+  height: 100%;
+}
 
-    #editor.tab-content.active {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
+#editor.tab-content.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 
-    #categories.tab-content.active {
-      display: block;
-      flex: 1;
-      overflow: auto;
-    }
+#categories.tab-content.active {
+  display: block;
+  flex: 1;
+  overflow: auto;
+}
 
-    #editor p {
-      margin: 0 0 10px 0;
-      flex-shrink: 0;
-    }
+#editor p {
+  margin: 0 0 10px 0;
+  flex-shrink: 0;
+}
 
-    .container {
-      width: 100%;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
+.container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: auto;
+}
 
-    textarea {
-      z-index: 5;
-      flex: 1;
-      width: 100%;
-      font-family: monospace;
-      background: transparent;
-      padding: 8px;
-      resize: none;
-      white-space: break-spaces;
-      overflow-wrap: break-word;
-      word-break: break-all;
-    }
+.rules-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
 
-    #textareaMirror {
-      white-space: break-spaces;
-      overflow-wrap: break-word;
-      word-break: break-all;
-      position: absolute;
-      z-index: 1;
-      inset: 0;
-      flex: 1;
-      width: 100%;
-      font-family: monospace;
-      color: transparent;
-      opacity: 0.5;
-      overflow-y: scroll;
-    }
+.rules-table th,
+.rules-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
 
-    button {
-      width: 100%;
-      padding: 8px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 10px;
-      flex-shrink: 0;
-    }
+.rules-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
 
-    button:disabled {
-      background: #cccccc;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
+.rules-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
 
-    button:hover:not(:disabled) {
-      background: #45a049;
-    }
+.rules-table tr:hover {
+  background-color: #f0f0f0;
+}
 
-    button:disabled:hover {
-      background: #cccccc;
-    }
-    .help {
-      font-size: 1em;
-      color: #666;
-      margin-top: 10px;
-      padding: 10px;
-      background: #f5f5f5;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
+.rule-input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
 
-    .category {
-      margin-bottom: 15px;
-    }
+.rule-select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: white;
+}
 
-    .category-name {
-      font-weight: bold;
-      margin-bottom: 5px;
-      padding: 5px;
-      background: #f0f0f0;
-      border-radius: 4px;
-    }
+.delete-rule {
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0;
+  width: auto;
+}
 
-    .pattern-list {
-      padding-left: 10px;
-    }
+.delete-rule:hover {
+  background-color: #cc0000;
+}
 
-    .pattern-item {
-      padding: 3px 0;
-    }
+.add-rule {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: auto;
+  align-self: flex-start;
+}
 
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.add-rule:hover {
+  background-color: #45a049;
+}
 
-    .button-group button,
-    .button-group .file-input-wrapper {
-      flex: 1;
-      margin-top: 0;
-    }
+.help {
+  font-size: 1em;
+  color: #666;
+  margin-top: 10px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
 
-    .file-input-wrapper {
-      position: relative;
-    }
+.help ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
 
-    .file-input-wrapper input[type="file"] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
+.help li {
+  margin-bottom: 5px;
+}
 
-    .file-input-button {
-      width: 100%;
-      padding: 8px;
-      background: #2196F3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      text-align: center;
-    }
+/* Ensure button group maintains its style */
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
 
-    .file-input-button:hover {
-      background: #1976D2;
-    }
+.category {
+  margin-bottom: 15px;
+}
 
-    .export-button {
-      background: #FF9800;
-    }
+.category-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding: 5px;
+  background: #f0f0f0;
+  border-radius: 4px;
+}
 
-    .export-button:hover {
-      background: #F57C00;
-    }
+.pattern-list {
+  padding-left: 10px;
+}
+
+.pattern-item {
+  padding: 3px 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.button-group button,
+.button-group .file-input-wrapper {
+  flex: 1;
+  margin-top: 0;
+}
+
+.file-input-wrapper {
+  position: relative;
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.file-input-button {
+  width: 100%;
+  padding: 8px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.file-input-button:hover {
+  background: #1976d2;
+}
+
+.export-button {
+  background: #ff9800;
+}
+
+.export-button:hover {
+  background: #f57c00;
+}
