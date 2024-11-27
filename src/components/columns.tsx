@@ -1,60 +1,70 @@
 import type { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
-import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
+import { DataTableColumnHeader } from "./ui/data-table-column-header";
 
 export const columns: ColumnDef<any>[] = [
 	{
+		id: "select",
+		header: ({ table }) => (
+			<Checkbox
+				checked={
+					table.getIsAllPageRowsSelected() ||
+					(table.getIsSomePageRowsSelected() && "indeterminate")
+				}
+				onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+				aria-label="Select all"
+			/>
+		),
+		cell: ({ row }) => (
+			<Checkbox
+				checked={row.getIsSelected()}
+				onCheckedChange={(value) => row.toggleSelected(!!value)}
+				aria-label="Select row"
+			/>
+		),
+		enableSorting: false,
+		enableHiding: false,
+	},
+	{
 		accessorKey: "name",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Name
-					<ArrowUpDown className="w-4 h-4 ml-2" />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Name" />
+		),
 	},
 	{
 		accessorKey: "description",
-		header: "Description",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Description" />
+		),
 	},
 	{
 		accessorKey: "category",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Category
-					<ArrowUpDown className="w-4 h-4 ml-2" />
-				</Button>
-			);
-		},
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Category" />
+		),
 	},
 	{
 		accessorKey: "block_pattern",
-		header: "Blocking Pattern",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Block Pattern" />
+		),
 	},
 	{
-		accessorKey: "block_mode",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-				>
-					Blocking Mode
-					<ArrowUpDown className="w-4 h-4 ml-2" />
-				</Button>
-			);
-		},
+		accessorKey: "mode",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Mode" />
+		),
 	},
 	{
-		accessorKey: "block_contexts",
-		header: "Blocking Contexts",
+		accessorKey: "contexts",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Contexts" />
+		),
+	},
+	{
+		accessorKey: "date_modified",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Date Modified" />
+		),
 	},
 ];
