@@ -12,7 +12,7 @@ export const ruleFormSchema = z.object({
 		.refine((value) => isValidRegex(value), {
 			message: "Invalid regular expression",
 		}),
-	blockMode: z.string(),
+	blockMode: z.enum(["Matching", "Surrounding"]),
 	contexts: z.array(z.string()).max(5),
-	dateModified: z.date(),
+	dateModified: z.string().datetime(),
 });

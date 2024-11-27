@@ -1,7 +1,10 @@
 import { ruleFormSchema } from "@/schemas/rule-form-schema";
+import { useRulesStore } from "@/stores/rules-store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod";
+import ArrayInput from "./array-input";
 import { Button } from "./ui/button";
 import { DialogFooter } from "./ui/dialog";
 import {
@@ -33,22 +36,25 @@ export function isValidRegex(pattern: string) {
 }
 
 export const CreateRuleForm: React.FC = () => {
+	const addRule = useRulesStore((state) => state.add);
+
 	const form = useForm<z.infer<typeof ruleFormSchema>>({
 		resolver: zodResolver(ruleFormSchema),
 		defaultValues: {
-			id: "",
+			id: uuidv4(),
 			name: "",
 			description: "",
 			blockPattern: "",
 			blockMode: "Matching",
 			contexts: [],
-			dateModified: new Date(),
+			dateModified: new Date().toISOString(),
 		},
 	});
 
 	function onSubmit(values: z.infer<typeof ruleFormSchema>) {
 		// Do something with the form values.
 		// ✅ This will be type-safe and validated.
+		addRule(values);
 		console.log(values);
 	}
 
@@ -86,9 +92,17 @@ export const CreateRuleForm: React.FC = () => {
 							<FormItem>
 								<FormLabel>Mode</FormLabel>
 								<FormControl>
-									<Select {...field}>
+									<Select
+										value={field.value}
+										name={field.name}
+										onValueChange={field.onChange}
+									>
 										<SelectTrigger className="w-[180px]">
-											<SelectValue placeholder="Mode" />
+											<SelectValue
+												placeholder="Mode"
+												onBlur={field.onBlur}
+												ref={field.ref}
+											/>
 										</SelectTrigger>
 										<SelectContent>
 											<SelectItem value="Matching">Matching</SelectItem>
@@ -125,7 +139,6 @@ export const CreateRuleForm: React.FC = () => {
 						</FormItem>
 					)}
 				/>
-
 				<FormField
 					control={form.control}
 					name="contexts"
@@ -133,17 +146,7 @@ export const CreateRuleForm: React.FC = () => {
 						<FormItem>
 							<FormLabel>Contexts</FormLabel>
 							<FormControl>
-								<Input
-									type="text"
-									multiple
-									placeholder="Comma-separated contexts"
-									value={field.value.join(", ")}
-									onChange={(e) => {
-										field.onChange(
-											e.target.value.split(",").map((str) => str.trim()),
-										);
-									}}
-								/>
+								<ArrayInput field={field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
