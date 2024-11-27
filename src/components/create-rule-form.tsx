@@ -4,7 +4,14 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "./ui/button";
 import { DialogFooter } from "./ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "./ui/form";
 import { Input } from "./ui/input";
 import {
 	Select,
@@ -14,6 +21,16 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+
+export function isValidRegex(pattern: string) {
+	if (!pattern) return false;
+	try {
+		new RegExp(pattern);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
 
 export const CreateRuleForm: React.FC = () => {
 	const form = useForm<z.infer<typeof ruleFormSchema>>({
@@ -69,7 +86,7 @@ export const CreateRuleForm: React.FC = () => {
 							<FormItem>
 								<FormLabel>Mode</FormLabel>
 								<FormControl>
-									<Select>
+									<Select {...field}>
 										<SelectTrigger className="w-[180px]">
 											<SelectValue placeholder="Mode" />
 										</SelectTrigger>
@@ -104,6 +121,7 @@ export const CreateRuleForm: React.FC = () => {
 							<FormControl>
 								<Input type="text" placeholder="Enter RegEx" {...field} />
 							</FormControl>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -117,10 +135,17 @@ export const CreateRuleForm: React.FC = () => {
 							<FormControl>
 								<Input
 									type="text"
+									multiple
 									placeholder="Comma-separated contexts"
-									{...field}
+									value={field.value.join(", ")}
+									onChange={(e) => {
+										field.onChange(
+											e.target.value.split(",").map((str) => str.trim()),
+										);
+									}}
 								/>
 							</FormControl>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
