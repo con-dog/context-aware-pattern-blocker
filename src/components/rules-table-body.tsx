@@ -10,7 +10,7 @@ export const RulesTableBody: React.FC = () => {
 	return (
 		<tbody className="bg-white divide-y divide-gray-200">
 			{rules.map((rule: Rule) => (
-				<RuleRow key={uuidv4()} />
+				<RuleRow key={uuidv4()} {...rule} />
 			))}
 		</tbody>
 	);
