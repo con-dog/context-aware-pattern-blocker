@@ -35,7 +35,6 @@ export const RuleTable: React.FC = () => {
 									</Tooltip>
 								</TableHead>
 							))}
-							<TableHead>Actions</TableHead>
 						</TableRow>
 					</TableHeader>
 					<RuleTableBody />
