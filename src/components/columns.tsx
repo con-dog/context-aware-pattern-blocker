@@ -1,10 +1,11 @@
+import type { Rule } from "@/types/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { DataTableColumnHeader } from "./ui/data-table-column-header";
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<Rule>[] = [
 	{
 		id: "select",
 		header: ({ table }) => (
