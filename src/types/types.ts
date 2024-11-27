@@ -1,27 +1,27 @@
-export type BlockMode = 'matching' | 'surrounding';
+export type BlockMode = "matching" | "surrounding";
 
 export interface RuleUserOptionalFields {
-  name: string;
-  description: string;
-  blockContexts: string[];
-  category: string;
+	name: string;
+	description: string;
+	blockContexts: string[];
+	category: string;
 }
 
 export interface RuleUserRequiredFields {
-  blockPattern: string;
-  blockMode: BlockMode;
+	blockPattern: string;
+	blockMode: BlockMode;
 }
 
 export interface Rule extends RuleUserOptionalFields, RuleUserRequiredFields {
-  id: string;
+	id: string;
 }
 
 export interface TooltipProps {
-  text: string;
-  children: React.ReactNode;
+	text: string;
+	children: React.ReactNode;
 }
 
 export interface TableHeaderProps {
-  title: string;
-  tooltip: string;
+	title: string;
+	tooltip: string;
 }
