@@ -1,11 +1,19 @@
-export interface Rule {
-  id: string;
+export type BlockMode = 'matching' | 'surrounding';
+
+export interface RuleUserOptionalFields {
   name: string;
   description: string;
-  blockPattern: string;
-  blockMode: 'matching' | 'surrounding';
   blockContexts: string[];
   category: string;
+}
+
+export interface RuleUserRequiredFields {
+  blockPattern: string;
+  blockMode: BlockMode;
+}
+
+export interface Rule extends RuleUserOptionalFields, RuleUserRequiredFields {
+  id: string;
 }
 
 export interface TooltipProps {
