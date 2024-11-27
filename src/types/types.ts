@@ -3,7 +3,7 @@ export type BlockMode = "matching" | "surrounding";
 export interface RuleUserOptionalFields {
 	name: string;
 	description: string;
-	blockContexts: string[];
+	contexts: string[];
 	category: string;
 }
 

@@ -15,7 +15,7 @@ function getData(): Rule[] {
 			category: "Category 1",
 			blockPattern: "Block Pattern 1",
 			blockMode: "matching",
-			blockContexts: ["Context 1", "Context 2"],
+			contexts: ["Context 1", "Context 2"],
 			dateModified: new Date(),
 		},
 

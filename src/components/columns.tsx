@@ -47,13 +47,13 @@ export const columns: ColumnDef<Rule>[] = [
 		),
 	},
 	{
-		accessorKey: "block_pattern",
+		accessorKey: "blockPattern",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Block Pattern" />
 		),
 	},
 	{
-		accessorKey: "mode",
+		accessorKey: "blockMode",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Mode" />
 		),
@@ -65,7 +65,7 @@ export const columns: ColumnDef<Rule>[] = [
 		),
 	},
 	{
-		accessorKey: "date_modified",
+		accessorKey: "dateModified",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Date Modified" />
 		),
