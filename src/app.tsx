@@ -1,12 +1,105 @@
 // App.tsx
 import type React from "react";
-import { useState } from "react";
-import { RuleTable } from "./components/rule-table";
+import { columns } from "./components/columns";
+import { DataTable } from "./components/rule-data-table";
 import { TooltipProvider } from "./components/ui/tooltip";
 
-const App: React.FC = () => {
-	const [activeTab, setActiveTab] = useState<"rules" | "todo">("rules");
+function getData() {
+	// Fetch data from your API here.
+	return [
+		{
+			name: "Rule 1",
+			description: "Description 1",
+			category: "Category 1",
+			block_pattern: "Block Pattern 1",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 1",
+		},
+		{
+			name: "Rule 2",
+			description: "Description 2",
+			category: "Category 2",
+			block_pattern: "Block Pattern 2",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 2",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		{
+			name: "Rule 3",
+			description: "Description 3",
+			category: "Category 3",
+			block_pattern: "Block Pattern 3",
+			block_mode: "matching",
+			block_contexts: "Block Contexts 3",
+		},
+		// ...
+	];
+}
 
+const App: React.FC = () => {
 	return (
 		<TooltipProvider>
 			<div className="min-h-screen bg-gray-50">
@@ -19,36 +112,9 @@ const App: React.FC = () => {
 				</header>
 
 				<div className="px-4 py-6 mx-auto max-w-7xl">
-					<div className="flex mb-6 border-b border-gray-200">
-						<button
-							type="button"
-							className={`px-4 py-2 -mb-px ${
-								activeTab === "rules"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-500 hover:text-gray-700"
-							}`}
-							onClick={() => setActiveTab("rules")}
-						>
-							Rules
-						</button>
-						<button
-							type="button"
-							className={`px-4 py-2 -mb-px ${
-								activeTab === "todo"
-									? "border-b-2 border-blue-500 text-blue-600"
-									: "text-gray-500 hover:text-gray-700"
-							}`}
-							onClick={() => setActiveTab("todo")}
-						>
-							TODO
-						</button>
+					<div className="container py-10 mx-auto">
+						<DataTable columns={columns} data={getData()} />
 					</div>
-
-					{activeTab === "rules" ? (
-						<RuleTable />
-					) : (
-						<div className="p-6">TODO content here</div>
-					)}
 				</div>
 			</div>
 		</TooltipProvider>
