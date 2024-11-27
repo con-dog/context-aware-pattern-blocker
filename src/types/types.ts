@@ -1,4 +1,4 @@
-export type BlockMode = "matching" | "surrounding";
+export type BlockMode = "Matching" | "Surrounding";
 
 export interface RuleUserOptionalFields {
 	name: string;
