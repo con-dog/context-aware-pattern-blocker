@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-table";
 import type React from "react";
 import { useState } from "react";
+import { Button } from "./ui/button";
 import { DataTablePagination } from "./ui/data-table-pagination";
 import {
 	Table,
@@ -50,6 +51,10 @@ export const DataTable: React.FC<RuleDataTableProps<TData, TValue>> = ({
 	});
 	return (
 		<div>
+			<div className="flex items-center py-4 space-x-2">
+				<Button>Add new rule</Button>
+				<Button variant="destructive">Delete selected</Button>
+			</div>
 			<div className="border rounded-md">
 				<div className="h-[440px] relative overflow-auto">
 					<Table>

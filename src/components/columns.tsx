@@ -1,4 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table";
+import { Pencil } from "lucide-react";
+import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { DataTableColumnHeader } from "./ui/data-table-column-header";
 
@@ -66,5 +68,20 @@ export const columns: ColumnDef<any>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Date Modified" />
 		),
+	},
+	{
+		id: "actions",
+		enableHiding: false,
+		header: () => <span className="text-xs">Actions</span>,
+		cell: ({ row }) => {
+			return (
+				<div className="flex justify-start">
+					<Button variant="secondary" size="sm" onClick={() => {}}>
+						<span className="sr-only">Edit</span>
+						<Pencil className="w-4 h-4" />
+					</Button>
+				</div>
+			);
+		},
 	},
 ];
