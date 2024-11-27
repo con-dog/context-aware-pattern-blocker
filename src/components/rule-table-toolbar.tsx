@@ -1,7 +1,7 @@
 import type React from "react";
 import { useRulesStore } from "../stores/rules-store";
 
-export const TableToolbar: React.FC = () => {
+export const RuleTableToolbar: React.FC = () => {
 	const addNewRule = useRulesStore((state) => state.add);
 
 	return (
