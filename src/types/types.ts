@@ -14,6 +14,7 @@ export interface RuleUserRequiredFields {
 
 export interface Rule extends RuleUserOptionalFields, RuleUserRequiredFields {
 	id: string;
+	dateModified: Date;
 }
 
 export interface TooltipProps {

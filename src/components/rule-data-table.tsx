@@ -13,6 +13,12 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { DataTablePagination } from "./ui/data-table-pagination";
 import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -51,9 +57,37 @@ export const DataTable: React.FC<RuleDataTableProps<TData, TValue>> = ({
 	});
 	return (
 		<div>
-			<div className="flex items-center py-4 space-x-2">
-				<Button>Add new rule</Button>
-				<Button variant="destructive">Delete selected</Button>
+			<div className="flex justify-between py-4 space-x-2">
+				<div className="space-x-2">
+					<Button variant="outline">Add new rule</Button>
+					<Button variant="secondary">Delete selected</Button>
+				</div>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="outline" className="ml-auto">
+							Columns
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{table
+							.getAllColumns()
+							.filter((column) => column.getCanHide())
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) =>
+											column.toggleVisibility(!!value)
+										}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 			<div className="border rounded-md">
 				<div className="h-[440px] relative overflow-auto">
