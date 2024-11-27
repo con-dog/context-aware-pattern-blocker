@@ -1,9 +1,9 @@
+import { CreateRuleForm } from "./create-rule-form";
 import { Button } from "./ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -23,10 +23,7 @@ export const CreateRuleDialog: React.FC = () => {
 						account and remove your data from our servers.
 					</DialogDescription>
 				</DialogHeader>
-				<DialogFooter>
-					<Button variant="secondary">Cancel</Button>
-					<Button variant="default">Add</Button>
-				</DialogFooter>
+				<CreateRuleForm />
 			</DialogContent>
 		</Dialog>
 	);

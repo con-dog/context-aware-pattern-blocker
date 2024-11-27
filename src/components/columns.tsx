@@ -40,12 +40,7 @@ export const columns: ColumnDef<Rule>[] = [
 			<DataTableColumnHeader column={column} title="Description" />
 		),
 	},
-	{
-		accessorKey: "category",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Category" />
-		),
-	},
+
 	{
 		accessorKey: "blockPattern",
 		header: ({ column }) => (

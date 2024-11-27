@@ -4,7 +4,6 @@ export interface RuleUserOptionalFields {
 	name: string;
 	description: string;
 	contexts: string[];
-	category: string;
 }
 
 export interface RuleUserRequiredFields {
