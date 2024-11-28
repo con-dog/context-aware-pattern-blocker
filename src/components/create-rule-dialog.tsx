@@ -1,14 +1,7 @@
 import { useState } from "react";
-import { CreateRuleForm } from "./create-rule-form";
 import { Button } from "./ui/button";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "./ui/dialog";
+import { Dialog, DialogTrigger } from "./ui/dialog";
+import { RuleDialog } from "./rule-dialog";
 
 export const CreateRuleDialog: React.FC = () => {
 	const [open, setOpen] = useState(false);
@@ -18,15 +11,7 @@ export const CreateRuleDialog: React.FC = () => {
 			<DialogTrigger asChild>
 				<Button variant="outline">Add new rule</Button>
 			</DialogTrigger>
-			<DialogContent className="outline-none" tabIndex={-1}>
-				<DialogHeader>
-					<DialogTitle>Add a new rule to block content</DialogTitle>
-					<DialogDescription>
-						Rules will be applied on all sites you visit.
-					</DialogDescription>
-				</DialogHeader>
-				<CreateRuleForm onSuccess={() => setOpen(false)} />
-			</DialogContent>
+			<RuleDialog mode="create" open={open} onOpenChange={setOpen} />
 		</Dialog>
 	);
 };

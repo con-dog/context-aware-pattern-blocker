@@ -1,5 +1,6 @@
 import { ruleFormSchema } from "@/schemas/rule-form-schema";
 import { useRulesStore } from "@/stores/rules-store";
+import type { Rule } from "@/types/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CircleHelp } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -40,16 +41,19 @@ export function isValidRegex(pattern: string) {
 
 interface CreateRuleFormProps {
 	onSuccess?: () => void;
+	initialData?: Rule;
 }
 
 export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
+	initialData,
 	onSuccess,
 }) => {
 	const addRule = useRulesStore((state) => state.add);
+	const updateRule = useRulesStore((state) => state.update);
 
 	const form = useForm<z.infer<typeof ruleFormSchema>>({
 		resolver: zodResolver(ruleFormSchema),
-		defaultValues: {
+		defaultValues: initialData || {
 			id: uuidv4(),
 			name: "",
 			description: "",
@@ -61,7 +65,11 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 	});
 
 	function onSubmit(values: z.infer<typeof ruleFormSchema>) {
-		addRule(values);
+		if (initialData) {
+			updateRule({ ...values, dateModified: new Date().toISOString() });
+		} else {
+			addRule(values);
+		}
 		onSuccess?.();
 	}
 
@@ -221,7 +229,15 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 					)}
 				/>
 				<DialogFooter>
-					<Button variant="secondary">Cancel</Button>
+					<Button
+						variant="secondary"
+						type="button"
+						onClick={() => {
+							form.reset();
+						}}
+					>
+						Cancel
+					</Button>
 					<Button variant="default" type="submit">
 						Submit
 					</Button>

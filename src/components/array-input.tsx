@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ControllerRenderProps } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "./ui/button";
@@ -26,6 +26,11 @@ export const ArrayInput: React.FC<ArrayInputProps> = ({
 	maxItems = 5,
 }) => {
 	const [inputValue, setInputValue] = useState("");
+
+	// handle form reset, clear the input value
+	useEffect(() => {
+		setInputValue("");
+	}, [field.value]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setInputValue(e.target.value);
