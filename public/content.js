@@ -20,11 +20,10 @@ function replaceWithBlocks(text, pattern, blockMode) {
 		updateBadgeCount();
 
 		if (blockMode === "Surrounding") {
-			// Find all matches and their positions
 			let lastIndex = 0;
 			let result = "";
 
-			regex.lastIndex = 0; // Reset regex
+			regex.lastIndex = 0;
 			let match;
 			while (true) {
 				match = regex.exec(text);
@@ -88,7 +87,6 @@ function processVisibleNode(node) {
 	if (node.nodeType === Node.TEXT_NODE) {
 		processTextNode(node);
 	} else if (node.nodeName !== "SCRIPT" && node.nodeName !== "STYLE") {
-		// Process child text nodes
 		const walker = document.createTreeWalker(
 			node,
 			NodeFilter.SHOW_TEXT,
@@ -102,21 +100,18 @@ function processVisibleNode(node) {
 	}
 }
 
-// Reset counter when page changes
 function resetCounter() {
 	blockCount = 0;
 	processedNodes = new WeakSet();
 	updateBadgeCount();
 }
 
-// Create intersection observer
 const intersectionObserver = new IntersectionObserver(
 	(entries) => {
 		for (const entry of entries) {
 			if (entry.isIntersecting) {
 				processVisibleNode(entry.target);
 
-				// Also observe any new nodes that might be added to this element
 				const mutationObserver = new MutationObserver((mutations) => {
 					for (const mutation of mutations) {
 						for (const node of mutation.addedNodes) {
@@ -138,11 +133,10 @@ const intersectionObserver = new IntersectionObserver(
 		}
 	},
 	{
-		threshold: 0.1, // Start processing when at least 10% of the element is visible
+		threshold: 0.1,
 	},
 );
 
-// Initialize
 chrome.storage.sync.get(["rules"], (result) => {
 	if (!result.rules) {
 		return;
@@ -151,7 +145,6 @@ chrome.storage.sync.get(["rules"], (result) => {
 	rules = result.rules;
 	resetCounter();
 
-	// Observe all existing elements
 	const elements = document.body.getElementsByTagName("*");
 	for (const element of elements) {
 		intersectionObserver.observe(element);
@@ -177,10 +170,8 @@ chrome.storage.sync.get(["rules"], (result) => {
 	});
 });
 
-// Handle visibility changes
 document.addEventListener("visibilitychange", () => {
 	if (document.visibilityState === "visible") {
-		// Re-process visible elements
 		const elements = document.body.getElementsByTagName("*");
 		for (const element of elements) {
 			if (isElementInViewport(element)) {
@@ -190,7 +181,6 @@ document.addEventListener("visibilitychange", () => {
 	}
 });
 
-// Utility function to check if element is in viewport
 function isElementInViewport(el) {
 	const rect = el.getBoundingClientRect();
 	return (
