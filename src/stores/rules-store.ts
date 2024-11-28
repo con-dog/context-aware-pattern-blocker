@@ -10,7 +10,7 @@ type RulesStoreState = {
 type RulesStoreActions = {
 	add: (rule: Rule) => Promise<void>;
 	update: (rule: Partial<Rule>) => Promise<void>;
-	remove: (id: string) => Promise<void>;
+	remove: (ids: string | string[]) => Promise<void>;
 	load: () => Promise<void>;
 };
 
@@ -45,8 +45,9 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 		set({ rules: newRules });
 	},
 
-	remove: async (id) => {
-		const newRules = get().rules.filter((r) => r.id !== id);
+	remove: async (idsToRemove: string | string[]) => {
+		const ids = Array.isArray(idsToRemove) ? idsToRemove : [idsToRemove];
+		const newRules = get().rules.filter((r) => !ids.includes(r.id));
 		await storageUtils.saveRules(newRules);
 		set({ rules: newRules });
 	},

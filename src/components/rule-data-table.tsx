@@ -52,15 +52,16 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 		},
 	});
 
-	const handleDeleteSelected = () => {
-		const selectedRows = table.getFilteredSelectedRowModel().rows;
-		const selectedCount = selectedRows.length;
-
-		for (const row of selectedRows) {
-			removeRules(row.original.id);
+	const handleDeleteSelected = async () => {
+		try {
+			const selectedRows = table.getFilteredSelectedRowModel().rows;
+			const selectedIds = selectedRows.map((row) => row.original.id);
+			console.log("Deleting rows:", selectedIds);
+			await removeRules(selectedIds);
+			setRowSelection({});
+		} catch (error) {
+			console.error("Error deleting selected rows:", error);
 		}
-
-		setRowSelection({});
 	};
 
 	const selectedCount = table.getFilteredSelectedRowModel().rows.length;

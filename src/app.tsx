@@ -5,24 +5,6 @@ import { columns } from "./components/columns";
 import { DataTable } from "./components/rule-data-table";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { useRulesStore } from "./stores/rules-store";
-import type { Rule } from "./types/types";
-
-function getData(): Rule[] {
-	// Fetch data from your API here.
-	return [
-		{
-			id: "1",
-			name: "Rule 1",
-			description: "Description 1",
-			blockPattern: "Block Pattern 1",
-			blockMode: "Matching",
-			contexts: ["Context 1", "Context 2"],
-			dateModified: new Date().toISOString(),
-		},
-
-		// ...
-	];
-}
 
 const App: React.FC = () => {
 	const loadRules = useRulesStore((state) => state.load);
