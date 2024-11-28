@@ -78,7 +78,7 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 				<ColumnVisibilityDropdownMenu table={table} />
 			</div>
 			<div className="border rounded-md">
-				<div className="h-[440px] relative overflow-auto">
+				<div className="h-[530px] relative overflow-auto">
 					<Table>
 						<TableHeader className="sticky top-0 z-10 bg-white">
 							{table.getHeaderGroups().map((headerGroup) => (
