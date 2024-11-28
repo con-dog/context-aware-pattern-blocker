@@ -15,4 +15,5 @@ export const ruleFormSchema = z.object({
 	blockMode: z.enum(["Matching", "Surrounding"]),
 	contexts: z.array(z.string()).max(5),
 	dateModified: z.string().datetime(),
+	blockedCount: z.number().int().min(0),
 });

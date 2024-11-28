@@ -82,6 +82,12 @@ export const columns: ColumnDef<Rule>[] = [
 		),
 	},
 	{
+		accessorKey: "blockedCount",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Blocked Count" />
+		),
+	},
+	{
 		id: "actions",
 		enableHiding: false,
 		header: () => <span className="text-xs">Actions</span>,

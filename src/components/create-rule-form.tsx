@@ -62,6 +62,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 			blockMode: "Matching",
 			contexts: [],
 			dateModified: new Date().toISOString(),
+			blockedCount: 0,
 		},
 	});
 
@@ -107,7 +108,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input type="hidden" placeholder="Rule name" {...field} />
+								<Input type="hidden" {...field} />
 							</FormControl>
 						</FormItem>
 					)}
@@ -255,7 +256,18 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input type="hidden" placeholder="Rule name" {...field} />
+								<Input type="hidden" {...field} />
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="blockedCount"
+					render={({ field }) => (
+						<FormItem>
+							<FormControl>
+								<Input type="hidden" {...field} />
 							</FormControl>
 						</FormItem>
 					)}

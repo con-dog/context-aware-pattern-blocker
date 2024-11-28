@@ -1,27 +1,23 @@
 export type BlockMode = "Matching" | "Surrounding";
 
+export interface RuleHiddenFields {
+	id: string;
+	dateModified: string;
+	blockedCount: number;
+}
+
 export interface RuleUserOptionalFields {
-	name: string;
 	description: string;
 	contexts: string[];
 }
 
 export interface RuleUserRequiredFields {
+	name: string;
 	blockPattern: string;
 	blockMode: BlockMode;
 }
 
-export interface Rule extends RuleUserOptionalFields, RuleUserRequiredFields {
-	id: string;
-	dateModified: string;
-}
-
-export interface TooltipProps {
-	text: string;
-	children: React.ReactNode;
-}
-
-export interface TableHeaderProps {
-	title: string;
-	tooltip: string;
-}
+export interface Rule
+	extends RuleHiddenFields,
+		RuleUserOptionalFields,
+		RuleUserRequiredFields {}
