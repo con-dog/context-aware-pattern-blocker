@@ -15,7 +15,7 @@ function getData(): Rule[] {
 			blockPattern: "Block Pattern 1",
 			blockMode: "Matching",
 			contexts: ["Context 1", "Context 2"],
-			dateModified: new Date(),
+			dateModified: new Date().toISOString(),
 		},
 
 		// ...

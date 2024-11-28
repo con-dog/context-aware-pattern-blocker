@@ -1,10 +1,12 @@
 import { ruleFormSchema } from "@/schemas/rule-form-schema";
 import { useRulesStore } from "@/stores/rules-store";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleHelp } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod";
 import ArrayInput from "./array-input";
+import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { DialogFooter } from "./ui/dialog";
 import {
@@ -24,6 +26,7 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export function isValidRegex(pattern: string) {
 	if (!pattern) return false;
@@ -72,13 +75,16 @@ export const CreateRuleForm: React.FC = () => {
 						</FormItem>
 					)}
 				/>
-				<div className="flex gap-2">
+				<div className="flex items-center gap-2">
 					<FormField
 						control={form.control}
 						name="name"
 						render={({ field }) => (
 							<FormItem className="flex-1">
-								<FormLabel>Name</FormLabel>
+								<FormLabel className="flex items-center">
+									<span>Name</span>
+									<CircleHelp className="w-4 h-4 opacity-0" />
+								</FormLabel>
 								<FormControl>
 									<Input type="text" placeholder="Rule name" {...field} />
 								</FormControl>
@@ -90,7 +96,21 @@ export const CreateRuleForm: React.FC = () => {
 						name="blockMode"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Mode</FormLabel>
+								<FormLabel className="flex items-center gap-1">
+									<span>Mode</span>
+									<Tooltip>
+										<TooltipTrigger>
+											<CircleHelp className="w-4 h-4" />
+										</TooltipTrigger>
+										<TooltipContent>
+											<p>'Matching' only blocks the exact matched text.</p>
+											<p>
+												'Surrounding' blocks the entire sentence containing the
+												match.
+											</p>
+										</TooltipContent>
+									</Tooltip>
+								</FormLabel>
 								<FormControl>
 									<Select
 										value={field.value}
@@ -131,7 +151,20 @@ export const CreateRuleForm: React.FC = () => {
 					name="blockPattern"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Block Pattern</FormLabel>
+							<FormLabel className="flex items-center">
+								<span className="mr-1">Block Pattern</span>
+								<Tooltip>
+									<TooltipTrigger>
+										<CircleHelp className="w-4 h-4" />
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>
+											Regular expression (regex) pattern to match text you want
+											to block
+										</p>
+									</TooltipContent>
+								</Tooltip>
+							</FormLabel>
 							<FormControl>
 								<Input type="text" placeholder="Enter RegEx" {...field} />
 							</FormControl>
@@ -144,7 +177,24 @@ export const CreateRuleForm: React.FC = () => {
 					name="contexts"
 					render={({ field }) => (
 						<FormItem>
-							<FormLabel>Contexts</FormLabel>
+							<FormLabel className="flex items-center">
+								<span>Contexts</span>
+								<Badge variant="outline" className="ml-1">
+									AI
+								</Badge>
+								<Tooltip>
+									<TooltipTrigger>
+										<CircleHelp className="w-4 h-4 ml-1" />
+									</TooltipTrigger>
+									<TooltipContent>
+										<p>
+											In what paragraph contexts should the Rule be applied?
+											(e.g.: 'alcohol, politics')
+										</p>
+										<p>Powered by a context-aware local LLM</p>
+									</TooltipContent>
+								</Tooltip>
+							</FormLabel>
 							<FormControl>
 								<ArrayInput field={field} />
 							</FormControl>
