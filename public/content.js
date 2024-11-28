@@ -1,6 +1,7 @@
 let rules = [];
 let blockCount = 0;
 let processedNodes = new WeakSet();
+let blockedElements = new Map();
 
 function updateBadgeCount() {
 	chrome.runtime.sendMessage({
@@ -9,8 +10,52 @@ function updateBadgeCount() {
 	});
 }
 
-function replaceWithBlocks(text, pattern, blockMode) {
+function generateUniqueSelector(element) {
+	if (!element || element.nodeType !== Node.ELEMENT_NODE) return null;
+
+	if (element.id) {
+		return `#${CSS.escape(element.id)}`;
+	}
+
+	const path = [];
+	let current = element;
+
+	while (current && current.nodeType === Node.ELEMENT_NODE) {
+		// Get the element's position among siblings of the same type
+		let selector = current.tagName.toLowerCase();
+		const sameTypeSiblings = Array.from(
+			current.parentNode?.children || [],
+		).filter((el) => el.tagName === current.tagName);
+
+		if (sameTypeSiblings.length > 1) {
+			const index = sameTypeSiblings.indexOf(current) + 1;
+			selector += `:nth-of-type(${index})`;
+		}
+
+		// Add classes if they exist
+		if (current.classList.length) {
+			selector += Array.from(current.classList)
+				.map((c) => `.${CSS.escape(c)}`)
+				.join("");
+		}
+
+		path.unshift(selector);
+
+		// Stop at body or if we have a unique enough path
+		if (current.tagName === "BODY" || path.length >= 3) break;
+		current = current.parentNode;
+	}
+
+	return path.join(" > ");
+}
+
+function replaceWithBlocks(text, pattern, blockMode, node) {
 	try {
+		if (!pattern) {
+			console.error("Missing pattern in replaceWithBlocks");
+			return text;
+		}
+
 		const regex = new RegExp(pattern, "gi");
 		const matches = text.match(regex);
 
@@ -19,15 +64,34 @@ function replaceWithBlocks(text, pattern, blockMode) {
 		blockCount += matches.length;
 		updateBadgeCount();
 
+		// Guard against undefined node
+		if (node) {
+			// Get the closest element parent of this text node
+			const elementToTrack =
+				node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
+			if (elementToTrack) {
+				const uniqueSelector = generateUniqueSelector(elementToTrack);
+				if (uniqueSelector) {
+					blockedElements.set(elementToTrack, {
+						selector: uniqueSelector,
+						originalText: text,
+						blockPattern: pattern,
+						blockMode: blockMode,
+					});
+				}
+			}
+		}
+
+		console.log("blockedElements", getBlockedElements());
+
 		if (blockMode === "Surrounding") {
+			// Find all matches and their positions
 			let lastIndex = 0;
 			let result = "";
 
-			regex.lastIndex = 0;
+			regex.lastIndex = 0; // Reset regex
 			let match;
-			while (true) {
-				match = regex.exec(text);
-				if (match === null) break;
+			while ((match = regex.exec(text)) !== null) {
 				const matchStart = match.index;
 				const matchEnd = regex.lastIndex;
 
@@ -64,13 +128,19 @@ function replaceWithBlocks(text, pattern, blockMode) {
 }
 
 function processTextNode(node) {
-	if (processedNodes.has(node)) return;
+	if (!node || processedNodes.has(node)) return;
 
 	let text = node.textContent;
 	let modified = false;
 
-	for (const { blockPattern, blockMode } of rules) {
-		const newText = replaceWithBlocks(text, blockPattern, blockMode);
+	for (const rule of rules) {
+		if (!rule || !rule.blockPattern) continue;
+		const newText = replaceWithBlocks(
+			text,
+			rule.blockPattern,
+			rule.blockMode,
+			node,
+		);
 		if (newText !== text) {
 			text = newText;
 			modified = true;
@@ -81,6 +151,26 @@ function processTextNode(node) {
 		node.textContent = text;
 		processedNodes.add(node);
 	}
+}
+
+function getBlockedElements() {
+	// Return array of objects with element and its data
+	return Array.from(blockedElements.entries()).map(([element, data]) => ({
+		element,
+		...data,
+	}));
+}
+
+function getBlockedElementBySelector(selector) {
+	for (const [element, data] of blockedElements.entries()) {
+		if (data.selector === selector) {
+			return {
+				element,
+				...data,
+			};
+		}
+	}
+	return null;
 }
 
 function processVisibleNode(node) {
@@ -103,6 +193,7 @@ function processVisibleNode(node) {
 function resetCounter() {
 	blockCount = 0;
 	processedNodes = new WeakSet();
+	blockedElements = new Map();
 	updateBadgeCount();
 }
 
