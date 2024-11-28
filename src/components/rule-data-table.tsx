@@ -1,3 +1,4 @@
+import { useRulesStore } from "@/stores/rules-store";
 import type { Rule } from "@/types/types";
 import {
 	type ColumnDef,
@@ -26,13 +27,15 @@ import {
 
 interface RuleDataTableProps {
 	columns: ColumnDef<Rule, unknown>[];
-	data: Rule[];
 }
 
-export const DataTable: React.FC<RuleDataTableProps> = ({ columns, data }) => {
+export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
 	const [sorting, setSorting] = useState<SortingState>([]);
+
+	const data = useRulesStore((state) => state.rules);
+	const removeRules = useRulesStore((state) => state.remove);
 
 	const table = useReactTable({
 		data,
@@ -50,12 +53,28 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns, data }) => {
 		},
 	});
 
+	const handleDeleteSelected = () => {
+		const selectedRows = table.getFilteredSelectedRowModel().rows;
+
+		for (const row of selectedRows) {
+			removeRules(row.original.id);
+		}
+
+		setRowSelection({});
+	};
+
 	return (
 		<div>
 			<div className="flex justify-between py-4 space-x-2">
 				<div className="space-x-2">
 					<CreateRuleDialog />
-					<Button variant="secondary">Delete selected</Button>
+					<Button
+						variant="secondary"
+						onClick={handleDeleteSelected}
+						disabled={table.getFilteredSelectedRowModel().rows.length === 0}
+					>
+						Delete selected
+					</Button>
 				</div>
 				<ColumnVisibilityDropdownMenu table={table} />
 			</div>

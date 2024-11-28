@@ -38,7 +38,13 @@ export function isValidRegex(pattern: string) {
 	}
 }
 
-export const CreateRuleForm: React.FC = () => {
+interface CreateRuleFormProps {
+	onSuccess?: () => void;
+}
+
+export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
+	onSuccess,
+}) => {
 	const addRule = useRulesStore((state) => state.add);
 
 	const form = useForm<z.infer<typeof ruleFormSchema>>({
@@ -55,10 +61,8 @@ export const CreateRuleForm: React.FC = () => {
 	});
 
 	function onSubmit(values: z.infer<typeof ruleFormSchema>) {
-		// Do something with the form values.
-		// ✅ This will be type-safe and validated.
 		addRule(values);
-		console.log(values);
+		onSuccess?.();
 	}
 
 	return (
