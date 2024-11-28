@@ -84,6 +84,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 	};
 
 	async function onSubmit(values: z.infer<typeof ruleFormSchema>) {
+		console.log("values", values);
 		try {
 			if (initialData) {
 				await updateRule({

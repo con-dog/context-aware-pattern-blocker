@@ -1,4 +1,4 @@
-const blockPatterns = [];
+let rules = [];
 let blockCount = 0;
 let processedNodes = new WeakSet(); // Keep track of nodes we've processed
 console.log("Here");
@@ -31,8 +31,8 @@ function processTextNode(node) {
 	let text = node.textContent;
 	let modified = false;
 
-	for (const { pattern } of blockPatterns) {
-		const newText = replaceWithBlocks(text, pattern);
+	for (const { blockPattern } of rules) {
+		const newText = replaceWithBlocks(text, blockPattern);
 		if (newText !== text) {
 			text = newText;
 			modified = true;
@@ -105,44 +105,42 @@ const intersectionObserver = new IntersectionObserver(
 
 // Initialize
 chrome.storage.sync.get(["rules"], (result) => {
-	console.log(result);
-	// if (result.blockPatterns) {
-	// 	blockPatterns = result.blockPatterns;
-	// 	resetCounter();
+	if (!result.rules) {
+		return;
+	}
 
-	// 	// Observe all existing elements
-	// 	const elements = document.body.getElementsByTagName("*");
-	// 	for (const element of elements) {
-	// 		intersectionObserver.observe(element);
-	// 	}
+	rules = result.rules;
+	resetCounter();
 
-	// 	// Observe new elements being added to the body
-	// 	const bodyObserver = new MutationObserver((mutations) => {
-	// 		for (const mutation of mutations) {
-	// 			for (const node of mutation.addedNodes) {
-	// 				if (node.nodeType === Node.ELEMENT_NODE) {
-	// 					intersectionObserver.observe(node);
-	// 					// Also observe any elements within this new node
-	// 					const childElements = node.getElementsByTagName("*");
-	// 					for (const element of childElements) {
-	// 						intersectionObserver.observe(element);
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	});
+	// Observe all existing elements
+	const elements = document.body.getElementsByTagName("*");
+	for (const element of elements) {
+		intersectionObserver.observe(element);
+	}
 
-	// 	bodyObserver.observe(document.body, {
-	// 		childList: true,
-	// 		subtree: true,
-	// 	});
-	// }
+	const bodyObserver = new MutationObserver((mutations) => {
+		for (const mutation of mutations) {
+			for (const node of mutation.addedNodes) {
+				if (node.nodeType === Node.ELEMENT_NODE) {
+					intersectionObserver.observe(node);
+					const childElements = node.getElementsByTagName("*");
+					for (const element of childElements) {
+						intersectionObserver.observe(element);
+					}
+				}
+			}
+		}
+	});
+
+	bodyObserver.observe(document.body, {
+		childList: true,
+		subtree: true,
+	});
 });
 
 // Handle visibility changes
 document.addEventListener("visibilitychange", () => {
 	if (document.visibilityState === "visible") {
-		resetCounter();
 		// Re-process visible elements
 		const elements = document.body.getElementsByTagName("*");
 		for (const element of elements) {
