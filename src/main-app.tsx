@@ -1,9 +1,9 @@
-import { BrainCircuit, Shield, Sliders } from "lucide-react";
+import { BrainCircuit, Info, Shield, Sliders } from "lucide-react";
 import type React from "react";
 import { useEffect } from "react";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/rule-data-table";
-import { Alert, AlertDescription } from "./components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "./components/ui/alert";
 import {
 	Card,
 	CardContent,
@@ -42,7 +42,6 @@ const App: React.FC = () => {
 
 				<main className="px-4 mx-auto max-w-7xl">
 					<div className="py-8 space-y-6">
-						{/* Info Section */}
 						<Card>
 							<CardHeader>
 								<CardTitle className="text-base">
@@ -111,7 +110,11 @@ const App: React.FC = () => {
 								</div>
 
 								<Alert>
-									<AlertDescription>
+									<Info className="w-5 h-5 text-card-foreground" />
+									<AlertTitle className="text-card-foreground">
+										Getting started
+									</AlertTitle>
+									<AlertDescription className="text-muted-foreground">
 										Create and manage your blocking rules below. Each rule can
 										be customized with specific contexts and patterns.
 									</AlertDescription>
@@ -119,7 +122,6 @@ const App: React.FC = () => {
 							</CardContent>
 						</Card>
 
-						{/* Data Table Section */}
 						<Card>
 							<CardHeader>
 								<CardTitle className="text-base">Blocking Rules</CardTitle>
