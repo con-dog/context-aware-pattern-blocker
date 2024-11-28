@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { v4 as uuidv4 } from "uuid";
 import type { z } from "zod";
 import ArrayInput from "./array-input";
+import RegexLivePreview from "./regex-live-preview";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { DialogFooter } from "./ui/dialog";
@@ -64,10 +65,30 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 		},
 	});
 
+	const handlePatternChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		// Don't escape the pattern - store it as the user types it
+		form.setValue("blockPattern", value);
+
+		// Test if it's valid
+		try {
+			new RegExp(value);
+			form.clearErrors("blockPattern");
+		} catch (e) {
+			form.setError("blockPattern", {
+				type: "manual",
+				message: "Invalid regular expression",
+			});
+		}
+	};
+
 	async function onSubmit(values: z.infer<typeof ruleFormSchema>) {
 		try {
 			if (initialData) {
-				await updateRule({ ...values, dateModified: new Date().toISOString() });
+				await updateRule({
+					...values,
+					dateModified: new Date().toISOString(),
+				});
 			} else {
 				await addRule(values);
 			}
@@ -162,6 +183,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 							<FormControl>
 								<Textarea placeholder="Rule description" {...field} />
 							</FormControl>
+							<FormMessage />
 						</FormItem>
 					)}
 				/>
@@ -185,9 +207,15 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 								</Tooltip>
 							</FormLabel>
 							<FormControl>
-								<Input type="text" placeholder="Enter RegEx" {...field} />
+								<Input
+									type="text"
+									placeholder="Enter RegEx"
+									{...field}
+									onChange={handlePatternChange}
+								/>
 							</FormControl>
 							<FormMessage />
+							<RegexLivePreview />
 						</FormItem>
 					)}
 				/>
