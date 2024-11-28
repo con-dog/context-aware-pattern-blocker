@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./main-app";
+import App from "./side-panel-app";
 import "./main-index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

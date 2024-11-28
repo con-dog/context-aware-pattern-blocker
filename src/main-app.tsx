@@ -1,4 +1,3 @@
-// App.tsx
 import type React from "react";
 import { useEffect } from "react";
 import { columns } from "./components/columns";
