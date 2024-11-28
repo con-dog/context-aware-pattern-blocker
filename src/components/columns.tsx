@@ -4,6 +4,8 @@ import { Pencil } from "lucide-react";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { DataTableColumnHeader } from "./ui/data-table-column-header";
+import { useState } from "react";
+import { RuleDialog } from "./rule-dialog";
 
 export const columns: ColumnDef<Rule>[] = [
 	{
@@ -70,9 +72,17 @@ export const columns: ColumnDef<Rule>[] = [
 		enableHiding: false,
 		header: () => <span className="text-xs">Actions</span>,
 		cell: ({ row }) => {
+			const [open, setOpen] = useState(false);
+
 			return (
 				<div className="flex justify-start">
-					<Button variant="secondary" size="sm" onClick={() => {}}>
+					<RuleDialog
+						mode="edit"
+						open={open}
+						onOpenChange={setOpen}
+						initialData={row.original}
+					/>
+					<Button variant="secondary" size="sm" onClick={() => setOpen(true)}>
 						<span className="sr-only">Edit</span>
 						<Pencil className="w-4 h-4" />
 					</Button>
