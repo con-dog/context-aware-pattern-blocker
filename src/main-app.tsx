@@ -49,7 +49,13 @@ const App: React.FC = () => {
 								</CardTitle>
 								<CardDescription>
 									Customize your browsing experience with intelligent word and
-									phrase blocking, powered by Google Gemini Nano
+									phrase blocking, powered by{" "}
+									<a
+										href="https://deepmind.google/technologies/gemini/nano/"
+										className="italic text-blue-500 underline"
+									>
+										Google Gemini Nano
+									</a>
 								</CardDescription>
 							</CardHeader>
 							<CardContent className="space-y-4">
