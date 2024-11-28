@@ -1,8 +1,10 @@
 // App.tsx
 import type React from "react";
+import { useEffect } from "react";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/rule-data-table";
 import { TooltipProvider } from "./components/ui/tooltip";
+import { useRulesStore } from "./stores/rules-store";
 import type { Rule } from "./types/types";
 
 function getData(): Rule[] {
@@ -23,6 +25,12 @@ function getData(): Rule[] {
 }
 
 const App: React.FC = () => {
+	const loadRules = useRulesStore((state) => state.load);
+
+	useEffect(() => {
+		loadRules();
+	}, [loadRules]);
+
 	return (
 		<TooltipProvider>
 			<div className="min-h-screen bg-gray-50">

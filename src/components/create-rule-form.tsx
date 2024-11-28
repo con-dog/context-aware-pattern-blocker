@@ -64,13 +64,17 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 		},
 	});
 
-	function onSubmit(values: z.infer<typeof ruleFormSchema>) {
-		if (initialData) {
-			updateRule({ ...values, dateModified: new Date().toISOString() });
-		} else {
-			addRule(values);
+	async function onSubmit(values: z.infer<typeof ruleFormSchema>) {
+		try {
+			if (initialData) {
+				await updateRule({ ...values, dateModified: new Date().toISOString() });
+			} else {
+				await addRule(values);
+			}
+			onSuccess?.();
+		} catch (error) {
+			console.error("Error saving rule:", error);
 		}
-		onSuccess?.();
 	}
 
 	return (
@@ -229,15 +233,6 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 					)}
 				/>
 				<DialogFooter>
-					<Button
-						variant="secondary"
-						type="button"
-						onClick={() => {
-							form.reset();
-						}}
-					>
-						Cancel
-					</Button>
 					<Button variant="default" type="submit">
 						Submit
 					</Button>

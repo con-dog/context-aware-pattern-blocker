@@ -1,25 +1,53 @@
+import { storageUtils } from "@/lib/storage";
 import { create } from "zustand";
 import type { Rule } from "../types/types";
 
 type RulesStoreState = {
 	rules: Rule[];
+	isLoading: boolean;
 };
 
 type RulesStoreActions = {
-	add: (rule: Rule) => void;
-	update: (rule: Partial<Rule>) => void;
-	remove: (id: string) => void;
+	add: (rule: Rule) => Promise<void>;
+	update: (rule: Partial<Rule>) => Promise<void>;
+	remove: (id: string) => Promise<void>;
+	load: () => Promise<void>;
 };
 
 type RulesStore = RulesStoreState & RulesStoreActions;
 
-export const useRulesStore = create<RulesStore>((set) => ({
+export const useRulesStore = create<RulesStore>((set, get) => ({
 	rules: [],
-	add: (rule) => set((state) => ({ rules: [rule, ...state.rules] })),
-	update: (rule) =>
-		set((state) => ({
-			rules: state.rules.map((r) => (r.id === rule.id ? { ...r, ...rule } : r)),
-		})),
-	remove: (id) =>
-		set((state) => ({ rules: state.rules.filter((r) => r.id !== id) })),
+	isLoading: true,
+
+	load: async () => {
+		set({ isLoading: true });
+		try {
+			const rules = await storageUtils.loadRules();
+			set({ rules, isLoading: false });
+		} catch (error) {
+			set({ isLoading: false });
+			throw error;
+		}
+	},
+
+	add: async (rule) => {
+		const newRules = [rule, ...get().rules];
+		await storageUtils.saveRules(newRules);
+		set({ rules: newRules });
+	},
+
+	update: async (rule) => {
+		const newRules = get().rules.map((r) =>
+			r.id === rule.id ? { ...r, ...rule } : r,
+		);
+		await storageUtils.saveRules(newRules);
+		set({ rules: newRules });
+	},
+
+	remove: async (id) => {
+		const newRules = get().rules.filter((r) => r.id !== id);
+		await storageUtils.saveRules(newRules);
+		set({ rules: newRules });
+	},
 }));
