@@ -87,7 +87,10 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 							<FormItem className="flex-1">
 								<FormLabel className="flex items-center">
 									<span>Name</span>
-									<CircleHelp className="w-4 h-4 opacity-0" />
+									<CircleHelp
+										className="w-4 h-4 opacity-0"
+										aria-hidden="true"
+									/>
 								</FormLabel>
 								<FormControl>
 									<Input type="text" placeholder="Rule name" {...field} />
@@ -103,7 +106,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 								<FormLabel className="flex items-center gap-1">
 									<span>Mode</span>
 									<Tooltip>
-										<TooltipTrigger>
+										<TooltipTrigger tabIndex={-1} aria-label="Mode help">
 											<CircleHelp className="w-4 h-4" />
 										</TooltipTrigger>
 										<TooltipContent>
@@ -158,7 +161,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 							<FormLabel className="flex items-center">
 								<span className="mr-1">Block Pattern</span>
 								<Tooltip>
-									<TooltipTrigger>
+									<TooltipTrigger tabIndex={-1} aria-label="Block pattern help">
 										<CircleHelp className="w-4 h-4" />
 									</TooltipTrigger>
 									<TooltipContent>
@@ -187,7 +190,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 									AI
 								</Badge>
 								<Tooltip>
-									<TooltipTrigger>
+									<TooltipTrigger tabIndex={-1} aria-label="Contexts help">
 										<CircleHelp className="w-4 h-4 ml-1" />
 									</TooltipTrigger>
 									<TooltipContent>

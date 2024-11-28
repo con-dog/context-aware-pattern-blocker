@@ -18,7 +18,7 @@ export const CreateRuleDialog: React.FC = () => {
 			<DialogTrigger asChild>
 				<Button variant="outline">Add new rule</Button>
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent className="outline-none" tabIndex={-1}>
 				<DialogHeader>
 					<DialogTitle>Add a new rule to block content</DialogTitle>
 					<DialogDescription>
