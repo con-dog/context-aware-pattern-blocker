@@ -14,7 +14,7 @@ import type React from "react";
 import { useState } from "react";
 import { ColumnVisibilityDropdownMenu } from "./column-visibility-dropdown-menu";
 import { CreateRuleDialog } from "./create-rule-dialog";
-import { Button } from "./ui/button";
+import { DeleteRuleAlertDialog } from "./delete-rule-alert-dialog";
 import { DataTablePagination } from "./ui/data-table-pagination";
 import {
 	Table,
@@ -33,7 +33,6 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 	const [rowSelection, setRowSelection] = useState({});
 	const [sorting, setSorting] = useState<SortingState>([]);
-
 	const data = useRulesStore((state) => state.rules);
 	const removeRules = useRulesStore((state) => state.remove);
 
@@ -55,6 +54,7 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 
 	const handleDeleteSelected = () => {
 		const selectedRows = table.getFilteredSelectedRowModel().rows;
+		const selectedCount = selectedRows.length;
 
 		for (const row of selectedRows) {
 			removeRules(row.original.id);
@@ -63,18 +63,17 @@ export const DataTable: React.FC<RuleDataTableProps> = ({ columns }) => {
 		setRowSelection({});
 	};
 
+	const selectedCount = table.getFilteredSelectedRowModel().rows.length;
+
 	return (
 		<div>
 			<div className="flex justify-between py-4 space-x-2">
 				<div className="space-x-2">
 					<CreateRuleDialog />
-					<Button
-						variant="secondary"
-						onClick={handleDeleteSelected}
-						disabled={table.getFilteredSelectedRowModel().rows.length === 0}
-					>
-						Delete selected
-					</Button>
+					<DeleteRuleAlertDialog
+						handleDeleteSelected={handleDeleteSelected}
+						selectedCount={selectedCount}
+					/>
 				</div>
 				<ColumnVisibilityDropdownMenu table={table} />
 			</div>
