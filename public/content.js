@@ -1,7 +1,6 @@
 let rules = [];
 let blockCount = 0;
-let processedNodes = new WeakSet(); // Keep track of nodes we've processed
-console.log("Here");
+let processedNodes = new WeakSet();
 
 function updateBadgeCount() {
 	chrome.runtime.sendMessage({
@@ -10,15 +9,55 @@ function updateBadgeCount() {
 	});
 }
 
-function replaceWithBlocks(text, pattern) {
+function replaceWithBlocks(text, pattern, blockMode) {
 	try {
 		const regex = new RegExp(pattern, "gi");
 		const matches = text.match(regex);
-		if (matches) {
-			blockCount += matches.length;
-			updateBadgeCount();
+
+		if (!matches) return text;
+
+		blockCount += matches.length;
+		updateBadgeCount();
+
+		if (blockMode === "Surrounding") {
+			// Find all matches and their positions
+			let lastIndex = 0;
+			let result = "";
+
+			regex.lastIndex = 0; // Reset regex
+			let match;
+			while (true) {
+				match = regex.exec(text);
+				if (match === null) break;
+				const matchStart = match.index;
+				const matchEnd = regex.lastIndex;
+
+				if (lastIndex === 0) {
+					// First match: process from start of text to end of match
+					result +=
+						text.slice(0, matchStart).replace(/[a-zA-Z0-9]/g, "█") +
+						text.slice(matchStart, matchEnd).replace(/[a-zA-Z0-9]/g, "█");
+				} else {
+					// Process from last position to end of current match
+					result += text
+						.slice(lastIndex, matchEnd)
+						.replace(/[a-zA-Z0-9]/g, "█");
+				}
+
+				lastIndex = matchEnd;
+			}
+
+			// Process remaining text if there was at least one match
+			if (lastIndex > 0) {
+				result += text.slice(lastIndex).replace(/[a-zA-Z0-9]/g, "█");
+				return result;
+			}
 		}
-		return text.replace(regex, (match) => "█".repeat(match.length));
+
+		// Default "Matching" mode: just replace alphanumerics in matched text
+		return text.replace(regex, (match) => {
+			return match.replace(/[a-zA-Z0-9]/g, "█");
+		});
 	} catch (e) {
 		console.error("Invalid regex pattern:", pattern, e);
 		return text;
@@ -31,8 +70,8 @@ function processTextNode(node) {
 	let text = node.textContent;
 	let modified = false;
 
-	for (const { blockPattern } of rules) {
-		const newText = replaceWithBlocks(text, blockPattern);
+	for (const { blockPattern, blockMode } of rules) {
+		const newText = replaceWithBlocks(text, blockPattern, blockMode);
 		if (newText !== text) {
 			text = newText;
 			modified = true;

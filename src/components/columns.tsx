@@ -76,15 +76,15 @@ export const columns: ColumnDef<Rule>[] = [
 		},
 	},
 	{
-		accessorKey: "dateModified",
-		header: ({ column }) => (
-			<DataTableColumnHeader column={column} title="Date Modified" />
-		),
-	},
-	{
 		accessorKey: "blockedCount",
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Blocked Count" />
+		),
+	},
+	{
+		accessorKey: "dateModified",
+		header: ({ column }) => (
+			<DataTableColumnHeader column={column} title="Date Modified" />
 		),
 	},
 	{
@@ -93,7 +93,6 @@ export const columns: ColumnDef<Rule>[] = [
 		header: () => <span className="text-xs">Actions</span>,
 		cell: ({ row }) => {
 			const [open, setOpen] = useState(false);
-
 			return (
 				<div className="flex justify-start">
 					<RuleDialog
