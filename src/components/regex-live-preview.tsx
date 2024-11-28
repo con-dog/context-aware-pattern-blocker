@@ -16,12 +16,8 @@ const RegexLivePreview = () => {
 
 		try {
 			const regex = new RegExp(blockPattern, "g");
-			// Add a zero-width space after <br /> to force the line height
-			let htmlContent = testText
-				.replace(/ /g, "\u00a0")
-				.replace(/\n/g, "<br />\u200B");
+			let htmlContent = testText;
 
-			// Replace matches with highlighted spans
 			if (regex.source !== "(?:)") {
 				htmlContent = htmlContent.replace(
 					regex,
@@ -29,6 +25,9 @@ const RegexLivePreview = () => {
 						`<span class="inline-block bg-green-200 border-b-2 border-green-800" style="height: 1.2em; line-height: 1.2">${match}</span>`,
 				);
 			}
+
+			// Only need newline handling
+			htmlContent = htmlContent.replace(/\n/g, "<br />\u200B");
 
 			textareaMirror.current.innerHTML = htmlContent;
 			textareaMirror.current.style.width = `${textarea.current.offsetWidth}px`;
@@ -77,6 +76,7 @@ const RegexLivePreview = () => {
 		try {
 			const regex = new RegExp(blockPattern, "g");
 			const newMatches = testText.match(regex);
+			console.log("newMatches", newMatches);
 			setMatches(newMatches);
 		} catch (e) {
 			setMatches(null);
