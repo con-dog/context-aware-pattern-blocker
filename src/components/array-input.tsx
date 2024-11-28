@@ -73,7 +73,7 @@ export const ArrayInput: React.FC<ArrayInputProps> = ({
 					{field.value.map((item, index) => (
 						<span
 							key={uuidv4()}
-							className="flex items-center gap-1 py-2 pl-3 pr-1 rounded-full bg-zinc-700 h-7"
+							className="flex items-center gap-1 py-2 pl-3 pr-1 text-sm rounded-full bg-zinc-700 h-7"
 						>
 							<span className="text-zinc-50">{item}</span>
 							<Button
