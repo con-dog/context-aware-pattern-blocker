@@ -1,9 +1,15 @@
+import { storageUtils } from "./lib/storage";
+
 chrome.action.setBadgeBackgroundColor({
 	color: [0, 0, 0, 255],
 });
 chrome.action.setBadgeTextColor({ color: "#FFFFFF" });
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+	if (message.type === "UPDATED_RULE_STATS") {
+		await storageUtils.saveRules(message.rules);
+	}
+
 	if (message.type === "updateBadge") {
 		chrome.action.setBadgeTextColor({
 			color: "#FFFFFF",

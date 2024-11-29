@@ -16,6 +16,12 @@ export default defineConfig({
 				main: path.resolve(__dirname, "index.html"),
 				popup: path.resolve(__dirname, "popup.html"),
 				"side-panel": path.resolve(__dirname, "side-panel.html"),
+				"service-worker": path.resolve(__dirname, "./src/service-worker.ts"),
+			},
+			output: {
+				entryFileNames: "[name].js",
+				chunkFileNames: "chunks/[name].js",
+				assetFileNames: "assets/[name].[ext]",
 			},
 		},
 		copyPublicDir: true,

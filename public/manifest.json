@@ -6,7 +6,8 @@
 	"description": "Redact text on any site. Block words, phrases, or patterns. Categorize rules. Import & export rules. Open source. Privacy focused.",
 	"permissions": ["management", "sidePanel", "storage", "tabs"],
 	"background": {
-		"service_worker": "service-worker.js"
+		"service_worker": "service-worker.js",
+		"type": "module"
 	},
 	"content_scripts": [
 		{

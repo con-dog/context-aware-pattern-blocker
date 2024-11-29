@@ -298,14 +298,13 @@ function isElementInViewport(el) {
 	);
 }
 
-window.addEventListener("beforeunload", async () => {
-	for (const rule of rules) {
-		if (blockedElementCountPerRuleId?.[rule.id] > 0) {
-			rule.blockedCount += blockedElementCountPerRuleId[rule.id];
-		}
-	}
-	await Promise.all([
-		chrome.storage.sync.set({ rules }),
-		messageUtils.sendMessage({ type: "RULES_UPDATED" }),
-	]);
+window.addEventListener("beforeunload", () => {
+	chrome.runtime.sendMessage({
+		type: "UPDATED_RULE_STATS",
+		rules: rules.map((rule) => ({
+			...rule,
+			blockedCount:
+				rule.blockedCount + (blockedElementCountPerRuleId?.[rule.id] || 0),
+		})),
+	});
 });

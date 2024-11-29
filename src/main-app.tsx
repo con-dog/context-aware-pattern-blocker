@@ -13,18 +13,9 @@ import {
 import { TooltipProvider } from "./components/ui/tooltip";
 import { MainInformation } from "./main-information";
 import { useRulesStore } from "./stores/rules-store";
-import { messageUtils } from "./lib/messaging";
 
 const App: React.FC = () => {
 	const loadRules = useRulesStore((state) => state.load);
-
-	useEffect(() => {
-		messageUtils.addMessageListener(({ type }: { type: string }) => {
-			if (type === "RULES_UPDATED") {
-				loadRules();
-			}
-		});
-	}, []);
 
 	useEffect(() => {
 		loadRules();
