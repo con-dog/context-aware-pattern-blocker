@@ -27,6 +27,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "./ui/select";
+import { Switch } from "./ui/switch";
 import { Textarea } from "./ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -63,6 +64,7 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 			contexts: [],
 			dateModified: new Date().toISOString(),
 			blockedCount: 0,
+			enabled: "on",
 		},
 	});
 
@@ -84,7 +86,6 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 	};
 
 	async function onSubmit(values: z.infer<typeof ruleFormSchema>) {
-		console.log("values", values);
 		try {
 			if (initialData) {
 				await updateRule({
@@ -269,6 +270,17 @@ export const CreateRuleForm: React.FC<CreateRuleFormProps> = ({
 						<FormItem>
 							<FormControl>
 								<Input type="hidden" {...field} />
+							</FormControl>
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="enabled"
+					render={({ field }) => (
+						<FormItem className="hidden">
+							<FormControl>
+								<Switch {...field} />
 							</FormControl>
 						</FormItem>
 					)}

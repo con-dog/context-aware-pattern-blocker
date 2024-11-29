@@ -16,4 +16,5 @@ export const ruleFormSchema = z.object({
 	contexts: z.array(z.string()).max(5),
 	dateModified: z.string().datetime(),
 	blockedCount: z.number().int().min(0),
+	enabled: z.enum(["on", "off"]),
 });

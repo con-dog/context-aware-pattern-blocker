@@ -15,6 +15,8 @@ interface ArrayInputProps {
 			blockMode: "Matching" | "Surrounding";
 			contexts: string[];
 			dateModified: string;
+			blockedCount: number;
+			enabled: "on" | "off";
 		},
 		"contexts"
 	>;
