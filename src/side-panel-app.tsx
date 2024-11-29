@@ -1,11 +1,24 @@
-import { AlertCircle, Brain, ExternalLink, Eye, Shield } from "lucide-react";
+import {
+	AlertCircle,
+	Brain,
+	ExternalLink,
+	Eye,
+	HelpCircle,
+	Shield,
+} from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { ScrollArea } from "./components/ui/scroll-area";
-import { TooltipProvider } from "./components/ui/tooltip";
+import { Slider } from "./components/ui/slider";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./components/ui/tooltip";
 import { useRulesStore } from "./stores/rules-store";
 
 interface BlockedElement {
@@ -18,6 +31,19 @@ interface BlockedElement {
 const App: React.FC = () => {
 	const loadRules = useRulesStore((state) => state.load);
 	const [selectedElement, setSelectedElement] = useState<string>("");
+	const [contextScore, setContextScore] = useState([0.5]); // Default to middle value
+
+	// Simplified values for the slider marks
+	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
+
+	// Full descriptions for the tooltip
+	const contextDescriptions = {
+		"0.00": "No connection to context",
+		"0.25": "Requires inference to connect",
+		"0.50": "Clear but secondary/metaphorical connection",
+		"0.75": "Direct reference but not main focus",
+		"1.00": "Explicitly about this context",
+	};
 
 	useEffect(() => {
 		loadRules();
@@ -155,6 +181,53 @@ const App: React.FC = () => {
 									))}
 								</RadioGroup>
 							</ScrollArea>
+						</div>
+
+						{/* Context Score Slider - Revised Layout */}
+						<div className="w-full px-3 pt-3 pb-2">
+							<div className="space-y-3">
+								<div className="flex items-center justify-between w-full">
+									<div className="text-sm font-medium">Context Relevance</div>
+									<Tooltip>
+										<TooltipTrigger>
+											<HelpCircle className="w-4 h-4 text-muted-foreground" />
+										</TooltipTrigger>
+										<TooltipContent className="w-72">
+											<div className="space-y-2">
+												{Object.entries(contextDescriptions).map(
+													([score, desc]) => (
+														<div
+															key={score}
+															className="grid grid-cols-[40px,1fr] gap-2 text-sm"
+														>
+															<span className="font-medium">{score}:</span>
+															<span>{desc}</span>
+														</div>
+													),
+												)}
+											</div>
+										</TooltipContent>
+									</Tooltip>
+								</div>
+
+								<div className="space-y-1">
+									<Slider
+										value={contextScore}
+										onValueChange={setContextScore}
+										step={0.25}
+										min={0}
+										max={1}
+										className="py-2"
+									/>
+									<div className="flex justify-between w-full px-0.5">
+										{sliderMarks.map((mark) => (
+											<div key={mark} className="text-xs text-muted-foreground">
+												{mark.toFixed(2)}
+											</div>
+										))}
+									</div>
+								</div>
+							</div>
 						</div>
 
 						{/* AI Analysis Button */}
