@@ -13,7 +13,7 @@ const App: React.FC = () => {
 							<img src="/icons/icon.png" alt="App icon" className="w-7 h-7" />
 							<div className="flex-1 min-w-0">
 								<h1 className="w-full text-lg font-semibold tracking-tight whitespace-nowrap text-primary">
-									Context Aware Word & Phrase Blocker
+									Context Aware Blocker
 								</h1>
 								<p className="w-full text-sm text-muted-foreground">
 									Intelligent content filtering for a better browsing experience
