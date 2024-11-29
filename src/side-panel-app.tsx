@@ -105,7 +105,7 @@ const App: React.FC = () => {
 	];
 
 	const stats = {
-		activeRules: 5,
+		activeRules: rules.filter((rule) => rule.enabled === "on").length,
 		blockedElements: blockedElements.length,
 	};
 
