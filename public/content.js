@@ -1,12 +1,28 @@
 let rules = [];
-let blockCount = 0;
+let totalMatchesBlocked = 0;
 let processedNodes = new WeakSet();
 let blockedElements = new Map();
+
+const messageUtils = {
+	async sendMessage(message) {
+		try {
+			await chrome.runtime.sendMessage(message);
+		} catch (error) {
+			console.error("Error sending message to background script:", error);
+			throw error;
+		}
+	},
+	async addMessageListener(callback) {
+		chrome.runtime.onMessage.addListener((message) => {
+			callback(message);
+		});
+	},
+};
 
 function updateBadgeCount() {
 	chrome.runtime.sendMessage({
 		type: "updateBadge",
-		count: blockCount,
+		count: totalMatchesBlocked,
 	});
 }
 
@@ -49,19 +65,22 @@ function generateUniqueSelector(element) {
 	return path.join(" > ");
 }
 
-function replaceWithBlocks(text, pattern, blockMode, node) {
+function replaceWithBlocks(text, rule, node) {
+	const { blockPattern, blockMode, id, name, contexts } = rule;
+	let { blockedCount } = rule;
 	try {
-		if (!pattern) {
-			console.error("Missing pattern in replaceWithBlocks");
+		if (!blockPattern) {
+			console.error("Missing blockPattern in replaceWithBlocks");
 			return text;
 		}
 
-		const regex = new RegExp(pattern, "gi");
+		const regex = new RegExp(blockPattern, "gi");
 		const matches = text.match(regex);
 
 		if (!matches) return text;
 
-		blockCount += matches.length;
+		totalMatchesBlocked += matches.length;
+		blockedCount += matches.length;
 		updateBadgeCount();
 
 		// Guard against undefined node
@@ -75,14 +94,15 @@ function replaceWithBlocks(text, pattern, blockMode, node) {
 					blockedElements.set(elementToTrack, {
 						selector: uniqueSelector,
 						originalText: text,
-						blockPattern: pattern,
+						blockPattern: blockPattern,
 						blockMode: blockMode,
+						id: id,
+						name: name,
+						contexts: contexts,
 					});
 				}
 			}
 		}
-
-		console.log("blockedElements", getBlockedElements());
 
 		if (blockMode === "Surrounding") {
 			// Find all matches and their positions
@@ -117,12 +137,11 @@ function replaceWithBlocks(text, pattern, blockMode, node) {
 			}
 		}
 
-		// Default "Matching" mode: just replace alphanumerics in matched text
 		return text.replace(regex, (match) => {
-			return match.replace(/[a-zA-Z0-9]/g, "█");
+			return "█".repeat(match.length);
 		});
 	} catch (e) {
-		console.error("Invalid regex pattern:", pattern, e);
+		console.error("Invalid regex pattern:", blockPattern, e);
 		return text;
 	}
 }
@@ -135,12 +154,7 @@ function processTextNode(node) {
 
 	for (const rule of rules) {
 		if (!rule || !rule.blockPattern || rule.enabled !== "on") continue;
-		const newText = replaceWithBlocks(
-			text,
-			rule.blockPattern,
-			rule.blockMode,
-			node,
-		);
+		const newText = replaceWithBlocks(text, rule, node);
 		if (newText !== text) {
 			text = newText;
 			modified = true;
@@ -191,7 +205,7 @@ function processVisibleNode(node) {
 }
 
 function resetCounter() {
-	blockCount = 0;
+	totalMatchesBlocked = 0;
 	processedNodes = new WeakSet();
 	blockedElements = new Map();
 	updateBadgeCount();
