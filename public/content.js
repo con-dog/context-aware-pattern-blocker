@@ -2,6 +2,7 @@ let rules = [];
 let totalMatchesBlocked = 0;
 let processedNodes = new WeakSet();
 let blockedElements = new Map();
+let blockedElementCountPerRuleId = {};
 
 const messageUtils = {
 	async sendMessage(message) {
@@ -66,8 +67,7 @@ function generateUniqueSelector(element) {
 }
 
 function replaceWithBlocks(text, rule, node) {
-	const { blockPattern, blockMode, id, name, contexts } = rule;
-	let { blockedCount } = rule;
+	const { blockPattern, blockMode, id, name, contexts, blockedCount } = rule;
 	try {
 		if (!blockPattern) {
 			console.error("Missing blockPattern in replaceWithBlocks");
@@ -80,7 +80,8 @@ function replaceWithBlocks(text, rule, node) {
 		if (!matches) return text;
 
 		totalMatchesBlocked += matches.length;
-		blockedCount += matches.length;
+		blockedElementCountPerRuleId[id] =
+			(blockedElementCountPerRuleId[id] || blockedCount) + matches.length;
 		updateBadgeCount();
 
 		// Guard against undefined node
@@ -96,7 +97,6 @@ function replaceWithBlocks(text, rule, node) {
 						originalText: text,
 						blockPattern: blockPattern,
 						blockMode: blockMode,
-						id: id,
 						name: name,
 						contexts: contexts,
 					});
@@ -208,6 +208,7 @@ function resetCounter() {
 	totalMatchesBlocked = 0;
 	processedNodes = new WeakSet();
 	blockedElements = new Map();
+	blockedElementCountPerRuleId = {};
 	updateBadgeCount();
 }
 
@@ -296,3 +297,15 @@ function isElementInViewport(el) {
 		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
 	);
 }
+
+window.addEventListener("beforeunload", async () => {
+	for (const rule of rules) {
+		if (blockedElementCountPerRuleId?.[rule.id] > 0) {
+			rule.blockedCount += blockedElementCountPerRuleId[rule.id];
+		}
+	}
+	await Promise.all([
+		chrome.storage.sync.set({ rules }),
+		messageUtils.sendMessage({ type: "RULES_UPDATED" }),
+	]);
+});
