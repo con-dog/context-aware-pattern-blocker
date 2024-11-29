@@ -47,7 +47,6 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 		set({ rules: newRules });
 		await storageUtils.saveRules(newRules);
 		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
-		console.log("newRules", newRules);
 	},
 
 	remove: async (idsToRemove: string | string[]) => {

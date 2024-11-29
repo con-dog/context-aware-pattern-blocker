@@ -7,7 +7,11 @@ chrome.action.setBadgeTextColor({ color: "#FFFFFF" });
 
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 	if (message.type === "UPDATED_RULE_STATS") {
-		await storageUtils.saveRules(message.rules);
+		const rules = await storageUtils.loadRules();
+		const updatedRules = rules.map((rule) =>
+			rule.id === message.rule.id ? message.rule : rule,
+		);
+		await storageUtils.saveRules(updatedRules);
 	}
 
 	if (message.type === "updateBadge") {
