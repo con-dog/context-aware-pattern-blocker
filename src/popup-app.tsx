@@ -34,6 +34,7 @@ const App: React.FC = () => {
 								url: url,
 								active: true,
 							});
+							window.close();
 						}}
 					>
 						Open Rules App
@@ -44,10 +45,10 @@ const App: React.FC = () => {
 						size="sm"
 						className="flex items-center justify-center gap-1"
 						onClick={async () => {
-							const window = await chrome.windows.getCurrent({
+							const thisWindow = await chrome.windows.getCurrent({
 								windowTypes: ["normal"],
 							});
-							if (!window) {
+							if (!thisWindow) {
 								return;
 							}
 							chrome.sidePanel.setOptions(
@@ -56,9 +57,10 @@ const App: React.FC = () => {
 									path: "side-panel.html",
 								},
 								() => {
-									chrome.sidePanel.open({ windowId: window.id });
+									chrome.sidePanel.open({ windowId: thisWindow.id });
 								},
 							);
+							window.close();
 						}}
 					>
 						Open Sidepanel App
