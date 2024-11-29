@@ -12,6 +12,7 @@ import { Button } from "./components/ui/button";
 import { Card } from "./components/ui/card";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { ScrollArea } from "./components/ui/scroll-area";
+import { Separator } from "./components/ui/separator";
 import { Slider } from "./components/ui/slider";
 import {
 	Tooltip,
@@ -60,6 +61,24 @@ const App: React.FC = () => {
 		},
 		{
 			id: "2",
+			selector: ".sidebar .widget",
+			content: "Another blocked element...",
+			rule: "Social Media",
+		},
+		{
+			id: "3",
+			selector: ".sidebar .widget",
+			content: "Another blocked element...",
+			rule: "Social Media",
+		},
+		{
+			id: "4",
+			selector: ".sidebar .widget",
+			content: "Another blocked element...",
+			rule: "Social Media",
+		},
+		{
+			id: "5",
 			selector: ".sidebar .widget",
 			content: "Another blocked element...",
 			rule: "Social Media",
@@ -148,36 +167,39 @@ const App: React.FC = () => {
 						</div>
 
 						{/* Blocked Elements List */}
-						<div className="flex-1 w-full px-3">
+						<div className="flex flex-col flex-1 w-full gap-2 px-3">
 							<div className="py-2 text-sm font-medium">Blocked Elements</div>
-							<ScrollArea className="h-[300px] rounded-md border">
+							<ScrollArea className="flex-1 border rounded-md">
 								<RadioGroup
 									value={selectedElement}
 									onValueChange={setSelectedElement}
 									className="p-2 space-y-2"
 								>
 									{blockedElements.map((element) => (
-										<label
-											key={element.id}
-											className="flex items-start p-2 space-x-3 rounded cursor-pointer hover:bg-muted"
-										>
-											<RadioGroupItem
-												value={element.id}
-												id={element.id}
-												className="mt-1"
-											/>
-											<div className="flex-1">
-												<div className="text-sm font-medium">
-													{element.rule}
+										<>
+											<label
+												key={element.id}
+												className="flex items-start p-2 space-x-3 rounded cursor-pointer hover:bg-muted"
+											>
+												<RadioGroupItem
+													value={element.id}
+													id={element.id}
+													className="mt-1"
+												/>
+												<div className="flex-1">
+													<div className="text-sm font-medium">
+														{element.rule}
+													</div>
+													<div className="text-xs truncate text-muted-foreground">
+														{element.content}
+													</div>
+													<div className="mt-1 font-mono text-xs text-muted-foreground">
+														{element.selector}
+													</div>
 												</div>
-												<div className="text-xs truncate text-muted-foreground">
-													{element.content}
-												</div>
-												<div className="mt-1 font-mono text-xs text-muted-foreground">
-													{element.selector}
-												</div>
-											</div>
-										</label>
+											</label>
+											<Separator />
+										</>
 									))}
 								</RadioGroup>
 							</ScrollArea>
