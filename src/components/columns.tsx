@@ -1,3 +1,4 @@
+import { useRulesStore } from "@/stores/rules-store";
 import type { Rule } from "@/types/types";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Pencil } from "lucide-react";
@@ -7,6 +8,8 @@ import { RuleDialog } from "./rule-dialog";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import { DataTableColumnHeader } from "./ui/data-table-column-header";
+import { Switch } from "./ui/switch";
+
 export const columns: ColumnDef<Rule>[] = [
 	{
 		id: "select",
@@ -86,6 +89,44 @@ export const columns: ColumnDef<Rule>[] = [
 		header: ({ column }) => (
 			<DataTableColumnHeader column={column} title="Date Modified" />
 		),
+	},
+	{
+		id: "enabled",
+		header: ({ table, column }) => {
+			const [headerToggle, setHeaderToggle] = useState(true);
+
+			return (
+				<div className="flex items-center gap-2">
+					<span className="text-xs">Enabled</span>
+					<Switch
+						checked={headerToggle}
+						onCheckedChange={(checked) => {
+							setHeaderToggle(checked);
+							const ids = table
+								.getFilteredRowModel()
+								.rows.map((row) => row.original.id);
+							useRulesStore
+								.getState()
+								.toggleEnabled(ids, checked ? "on" : "off");
+						}}
+					/>
+				</div>
+			);
+		},
+		cell: ({ row }) => (
+			<div className="flex justify-center">
+				<Switch
+					checked={row.original.enabled === "on"}
+					onCheckedChange={(checked) => {
+						useRulesStore
+							.getState()
+							.toggleEnabled(row.original.id, checked ? "on" : "off");
+					}}
+				/>
+			</div>
+		),
+		enableSorting: true,
+		enableHiding: false,
 	},
 	{
 		id: "actions",

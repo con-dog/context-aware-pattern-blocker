@@ -6,12 +6,20 @@ import { TooltipProvider } from "./components/ui/tooltip";
 const App: React.FC = () => {
 	return (
 		<TooltipProvider>
-			<div className="bg-gray-50 w-fit">
-				<header className="bg-white shadow">
+			<div className="min-w-max bg-secondary/20">
+				<header className="bg-white border-b">
 					<div className="px-4 py-6 mx-auto">
-						<h3 className="font-bold text-gray-900 text-l">
-							Context Aware Word & Phrase Blocker
-						</h3>
+						<div className="flex items-center space-x-4">
+							<img src="/icons/icon.png" alt="App icon" className="w-7 h-7" />
+							<div className="flex-1 min-w-0">
+								<h1 className="w-full text-lg font-semibold tracking-tight whitespace-nowrap text-primary">
+									Context Aware Word & Phrase Blocker
+								</h1>
+								<p className="w-full text-sm text-muted-foreground">
+									Intelligent content filtering for a better browsing experience
+								</p>
+							</div>
+						</div>
 					</div>
 				</header>
 
