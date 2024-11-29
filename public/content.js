@@ -252,6 +252,8 @@ chrome.storage.sync.get(["rules"], (result) => {
 		return;
 	}
 
+	console.log(result.rules);
+
 	rules = result.rules;
 	resetCounter();
 

@@ -35,26 +35,27 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 
 	add: async (rule) => {
 		const newRules = [rule, ...get().rules];
+		set({ rules: newRules });
 		await storageUtils.saveRules(newRules);
 		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
-		set({ rules: newRules });
 	},
 
 	update: async (rule) => {
 		const newRules = get().rules.map((r) =>
 			r.id === rule.id ? { ...r, ...rule } : r,
 		);
+		set({ rules: newRules });
 		await storageUtils.saveRules(newRules);
 		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
-		set({ rules: newRules });
+		console.log("newRules", newRules);
 	},
 
 	remove: async (idsToRemove: string | string[]) => {
 		const ids = Array.isArray(idsToRemove) ? idsToRemove : [idsToRemove];
 		const newRules = get().rules.filter((r) => !ids.includes(r.id));
+		set({ rules: newRules });
 		await storageUtils.saveRules(newRules);
 		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
-		set({ rules: newRules });
 	},
 
 	toggleEnabled: async (idsToToggle: string | string[], enabled?: Enabled) => {
@@ -69,8 +70,8 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 			return rule;
 		});
 
+		set({ rules: newRules });
 		await storageUtils.saveRules(newRules);
 		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
-		set({ rules: newRules });
 	},
 }));

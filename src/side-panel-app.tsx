@@ -74,58 +74,6 @@ const App: React.FC = () => {
 
 	const rules = useRulesStore((state) => state.rules);
 
-	// const blockedElements: BlockedElement[] = [
-	// 	// {
-	// 	// 	id: "1",
-	// 	// 	selector: ".article p:first-child",
-	// 	// 	content: "Some blocked text here...",
-	// 	// 	rule: "Political Content",
-	// 	// },
-	// 	// {
-	// 	// 	id: "2",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "3",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "4",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "5",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "6",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "7",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// {
-	// 	// 	id: "8",
-	// 	// 	selector: ".sidebar .widget",
-	// 	// 	content: "Another blocked element...",
-	// 	// 	rule: "Social Media",
-	// 	// },
-	// 	// ... more elements
-	// ];
-
 	const stats = {
 		activeRules: rules.filter((rule) => rule.enabled === "on").length,
 		blockedElements: blockedElements.length,
