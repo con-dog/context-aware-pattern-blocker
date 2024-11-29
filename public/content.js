@@ -134,7 +134,7 @@ function processTextNode(node) {
 	let modified = false;
 
 	for (const rule of rules) {
-		if (!rule || !rule.blockPattern || !rule.enabled) continue;
+		if (!rule || !rule.blockPattern || rule.enabled !== "on") continue;
 		const newText = replaceWithBlocks(
 			text,
 			rule.blockPattern,
