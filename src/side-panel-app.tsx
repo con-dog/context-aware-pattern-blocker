@@ -285,7 +285,7 @@ const App: React.FC = () => {
 										console.log("Analyzing element:", selectedElement)
 									}
 								>
-									<Brain className="w-4 h-4 mr-2" />
+									<Brain className="w-4 h-4" />
 									Analyze with AI
 								</Button>
 							</div>
