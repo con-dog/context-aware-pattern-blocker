@@ -93,6 +93,7 @@ function replaceWithBlocks(text, rule, node) {
 				const uniqueSelector = generateUniqueSelector(elementToTrack);
 				if (uniqueSelector) {
 					blockedElements.set(elementToTrack, {
+						id: crypto.randomUUID(),
 						selector: uniqueSelector,
 						originalText: text,
 						blockPattern: blockPattern,
@@ -164,13 +165,16 @@ function processTextNode(node) {
 	if (modified) {
 		node.textContent = text;
 		processedNodes.add(node);
+		messageUtils.sendMessage({
+			type: "BLOCKED_ELEMENTS_UPDATED",
+			blockedElements: getBlockedElements(),
+		});
 	}
 }
 
 function getBlockedElements() {
 	// Return array of objects with element and its data
-	return Array.from(blockedElements.entries()).map(([element, data]) => ({
-		element,
+	return Array.from(blockedElements.entries()).map(([_, data]) => ({
 		...data,
 	}));
 }

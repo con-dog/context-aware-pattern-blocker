@@ -22,18 +22,23 @@ import {
 } from "./components/ui/tooltip";
 import { messageUtils } from "./lib/messaging";
 import { useRulesStore } from "./stores/rules-store";
+import type { BlockMode } from "./types/types";
 
 interface BlockedElement {
-	id: string;
 	selector: string;
-	content: string;
-	rule: string;
+	blockMode: BlockMode;
+	blockPattern: string;
+	contexts: string[];
+	name: string;
+	originalText: string;
+	id: string;
 }
 
 const App: React.FC = () => {
 	const loadRules = useRulesStore((state) => state.load);
 	const [selectedElement, setSelectedElement] = useState<string>("");
 	const [contextScore, setContextScore] = useState([0.5]); // Default to middle value
+	const [blockedElements, setBlockedElements] = useState<BlockedElement[]>([]);
 
 	// Simplified values for the slider marks
 	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
@@ -53,6 +58,14 @@ const App: React.FC = () => {
 				loadRules();
 			}
 		});
+		messageUtils.addMessageListener(
+			({ type, blockedElements }: { type: string; blockedElements: any[] }) => {
+				if (type === "BLOCKED_ELEMENTS_UPDATED") {
+					console.log("Blocked elements updated:", blockedElements);
+					setBlockedElements(blockedElements);
+				}
+			},
+		);
 	}, []);
 
 	useEffect(() => {
@@ -61,57 +74,57 @@ const App: React.FC = () => {
 
 	const rules = useRulesStore((state) => state.rules);
 
-	const blockedElements: BlockedElement[] = [
-		{
-			id: "1",
-			selector: ".article p:first-child",
-			content: "Some blocked text here...",
-			rule: "Political Content",
-		},
-		{
-			id: "2",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "3",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "4",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "5",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "6",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "7",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		{
-			id: "8",
-			selector: ".sidebar .widget",
-			content: "Another blocked element...",
-			rule: "Social Media",
-		},
-		// ... more elements
-	];
+	// const blockedElements: BlockedElement[] = [
+	// 	// {
+	// 	// 	id: "1",
+	// 	// 	selector: ".article p:first-child",
+	// 	// 	content: "Some blocked text here...",
+	// 	// 	rule: "Political Content",
+	// 	// },
+	// 	// {
+	// 	// 	id: "2",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "3",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "4",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "5",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "6",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "7",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// {
+	// 	// 	id: "8",
+	// 	// 	selector: ".sidebar .widget",
+	// 	// 	content: "Another blocked element...",
+	// 	// 	rule: "Social Media",
+	// 	// },
+	// 	// ... more elements
+	// ];
 
 	const stats = {
 		activeRules: rules.filter((rule) => rule.enabled === "on").length,
@@ -218,10 +231,7 @@ const App: React.FC = () => {
 													/>
 													<div className="flex-1">
 														<div className="text-sm font-medium">
-															{element.rule}
-														</div>
-														<div className="text-xs truncate text-muted-foreground">
-															{element.content}
+															{element.name}
 														</div>
 														<div className="mt-1 font-mono text-xs text-muted-foreground">
 															{element.selector}
