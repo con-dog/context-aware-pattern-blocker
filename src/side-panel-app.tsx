@@ -20,6 +20,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./components/ui/tooltip";
+import { messageUtils } from "./lib/messaging";
 import { useRulesStore } from "./stores/rules-store";
 
 interface BlockedElement {
@@ -45,6 +46,14 @@ const App: React.FC = () => {
 		"0.75": "Direct reference but not main focus",
 		"1.00": "Explicitly about this context",
 	};
+
+	useEffect(() => {
+		messageUtils.addMessageListener(({ type }: { type: string }) => {
+			if (type === "RULES_UPDATED") {
+				loadRules();
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		loadRules();

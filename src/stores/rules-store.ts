@@ -1,3 +1,4 @@
+import { messageUtils } from "@/lib/messaging";
 import { storageUtils } from "@/lib/storage";
 import { create } from "zustand";
 import type { Enabled, Rule } from "../types/types";
@@ -35,6 +36,7 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 	add: async (rule) => {
 		const newRules = [rule, ...get().rules];
 		await storageUtils.saveRules(newRules);
+		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
 		set({ rules: newRules });
 	},
 
@@ -43,6 +45,7 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 			r.id === rule.id ? { ...r, ...rule } : r,
 		);
 		await storageUtils.saveRules(newRules);
+		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
 		set({ rules: newRules });
 	},
 
@@ -50,6 +53,7 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 		const ids = Array.isArray(idsToRemove) ? idsToRemove : [idsToRemove];
 		const newRules = get().rules.filter((r) => !ids.includes(r.id));
 		await storageUtils.saveRules(newRules);
+		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
 		set({ rules: newRules });
 	},
 
@@ -66,6 +70,7 @@ export const useRulesStore = create<RulesStore>((set, get) => ({
 		});
 
 		await storageUtils.saveRules(newRules);
+		await messageUtils.sendMessage({ type: "RULES_UPDATED" });
 		set({ rules: newRules });
 	},
 }));
