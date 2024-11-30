@@ -1,5 +1,6 @@
 import {
 	AlertCircle,
+	Badge,
 	Brain,
 	ExternalLink,
 	Eye,
@@ -9,7 +10,7 @@ import {
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
-import { Card } from "./components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
 import { ScrollArea } from "./components/ui/scroll-area";
 import { Separator } from "./components/ui/separator";
@@ -269,6 +270,41 @@ const App: React.FC = () => {
 								>
 									<Brain className="w-4 h-4" />
 									Analyze with AI
+								</Button>
+							</div>
+
+							<div className="flex-none px-3">
+								<Card className="w-full bg-muted/50">
+									<CardHeader className="py-3">
+										<div className="flex items-center justify-between">
+											<CardTitle className="text-sm font-medium">
+												Analysis Results
+											</CardTitle>
+											<Badge type="secondary" className="text-xs">
+												0.75 relevance
+											</Badge>
+										</div>
+									</CardHeader>
+									<CardContent className="py-3 space-y-2">
+										<div className="text-sm text-muted-foreground">
+											This content appears to be highly relevant to the blocked
+											context based on surrounding text and semantic analysis.
+										</div>
+										<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
+											<AlertCircle className="w-4 h-4 text-primary" />
+											<span className="text-primary">
+												Recommended: Keep content blocked
+											</span>
+										</div>
+									</CardContent>
+								</Card>
+							</div>
+
+							{/* UNBLOCK BUTTON */}
+							<div className="flex-none p-3">
+								<Button className="w-full" variant="outline">
+									<Eye className="w-4 h-4" />
+									Reveal Text
 								</Button>
 							</div>
 						</div>
