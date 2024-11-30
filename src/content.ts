@@ -33,17 +33,26 @@ function highlightElement(selector) {
 
 	const oldOutline = elem.style.outline;
 	const oldPosition = elem.style.position;
+	const oldBackgroundColor = elem.style.backgroundColor;
+	const oldBoxShadow = elem.style.boxShadow;
+	const oldOutlineOffset = elem.style.outlineOffset;
 
 	elem.style.outline = "2px solid rgba(0, 132, 255, 0.8)";
 	elem.style.outlineOffset = "-1px";
 	elem.style.position = oldPosition === "static" ? "relative" : oldPosition;
+	elem.style.backgroundColor = "rgba(0, 132, 255, 0.1)";
 
 	elem.style.boxShadow = "0 0 0 3px rgba(0, 132, 255, 0.3)";
+	elem.scrollIntoView({ behavior: "smooth", block: "center" });
+	// focus
+	elem.focus();
 
 	setTimeout(() => {
+		elem.style.outlineOffset = oldOutlineOffset;
+		elem.style.backgroundColor = oldBackgroundColor;
 		elem.style.outline = oldOutline;
 		elem.style.outlineOffset = "";
-		elem.style.boxShadow = "";
+		elem.style.boxShadow = oldBoxShadow;
 		elem.style.position = oldPosition;
 	}, 5000);
 }

@@ -20,8 +20,8 @@ You will receive inputs in stringified JSON format:
 {
     "sentence": "single sentence to analyze",
     "contexts": ["context1", "context2", "context3"]
-}`
+}`;
 
 const session = await chrome.aiOriginTrial.languageModel.create({
-  systemPrompt: SYSTEM_PROMPT
+	systemPrompt: SYSTEM_PROMPT,
 });

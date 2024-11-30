@@ -176,7 +176,7 @@ const App: React.FC = () => {
 							{/* Blocked Elements List - Scrollable */}
 							<div className="flex flex-col flex-1 w-full min-h-0 gap-2 px-3">
 								<div className="flex-none py-2 text-sm font-medium">
-									Blocked Elements
+									Blocked Elements (mode: Surrounding)
 								</div>
 								<ScrollArea className="flex-1 border rounded-md">
 									<RadioGroup

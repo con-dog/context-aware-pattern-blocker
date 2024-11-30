@@ -1,0 +1,40 @@
+{
+	"page_url": "https://www.theguardian.com/international",
+	"content": [
+		{
+			"id": "article-1",
+			"header": "Global Climate Summit Ends with Historic Agreement",
+			"first_sentence": "World leaders reached a landmark deal to reduce carbon emissions by 40% by 2030, marking a turning point in climate policy."
+		},
+		{
+			"id": "article-2",
+			"header": "Tensions Rise as Peace Negotiations Collapse",
+			"first_sentence": "Diplomatic efforts ended abruptly yesterday as both sides withdrew from the negotiating table amid accusations of ceasefire violations."
+		},
+		{
+			"id": "article-3",
+			"header": "Youth Mental Health Crisis Deepens Post-Pandemic",
+			"first_sentence": "New study reveals alarming rise in depression and anxiety among teenagers, with experts calling for immediate intervention."
+		},
+		{
+			"id": "article-4",
+			"header": "Revolutionary AI Chip Promises Computing Breakthrough",
+			"first_sentence": "Silicon Valley startup unveils new processor design that could transform artificial intelligence capabilities while reducing energy consumption."
+		},
+		{
+			"id": "article-5",
+			"header": "Pharmaceutical Giants Face $50B Settlement",
+			"first_sentence": "Major drug companies agree to historic payout over their role in the opioid epidemic that has claimed thousands of lives."
+		},
+		{
+			"id": "article-6",
+			"header": "London's Winter Festival Brings Communities Together",
+			"first_sentence": "The city's annual cultural celebration kicked off with performances, food stalls, and interactive art installations drawing thousands of visitors."
+		},
+		{
+			"id": "article-7",
+			"header": "Global Markets Face Uncertainty as Recession Fears Grow",
+			"first_sentence": "Leading economists warn of potential downturn as inflation rates continue to challenge central banks worldwide."
+		}
+	]
+}
