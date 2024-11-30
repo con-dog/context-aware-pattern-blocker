@@ -27,6 +27,36 @@ function updateBadgeCount() {
 	});
 }
 
+function highlightElement(selector) {
+	const elem = document.querySelector(selector);
+	if (!elem) return;
+
+	const oldOutline = elem.style.outline;
+	const oldPosition = elem.style.position;
+
+	elem.style.outline = "2px solid rgba(0, 132, 255, 0.8)";
+	elem.style.outlineOffset = "-1px";
+	elem.style.position = oldPosition === "static" ? "relative" : oldPosition;
+
+	elem.style.boxShadow = "0 0 0 3px rgba(0, 132, 255, 0.3)";
+
+	setTimeout(() => {
+		elem.style.outline = oldOutline;
+		elem.style.outlineOffset = "";
+		elem.style.boxShadow = "";
+		elem.style.position = oldPosition;
+	}, 5000);
+}
+
+messageUtils.addMessageListener((message) => {
+	if (message.type === "SELECTED_ELEMENT_UPDATED") {
+		console.log("SELECTED_ELEMENT_UPDATED", message);
+		const { selectedElementId } = message;
+		const blockedElement = getBlockedElementById(selectedElementId);
+		highlightElement(blockedElement.selector);
+	}
+});
+
 function generateUniqueSelector(element) {
 	if (!element || element.nodeType !== Node.ELEMENT_NODE) return null;
 
@@ -191,6 +221,18 @@ function getBlockedElementBySelector(selector) {
 	return null;
 }
 
+function getBlockedElementById(id) {
+	for (const [element, data] of blockedElements.entries()) {
+		if (data.id === id) {
+			return {
+				element,
+				...data,
+			};
+		}
+	}
+	return null;
+}
+
 function processVisibleNode(node) {
 	if (node.nodeType === Node.TEXT_NODE) {
 		processTextNode(node);
@@ -251,8 +293,6 @@ chrome.storage.sync.get(["rules"], (result) => {
 	if (!result.rules) {
 		return;
 	}
-
-	console.log(result.rules);
 
 	rules = result.rules;
 	resetCounter();

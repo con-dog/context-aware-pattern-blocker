@@ -79,6 +79,21 @@ const App: React.FC = () => {
 		blockedElements: blockedElements.length,
 	};
 
+	const handleSelectElement = async (selectedElementId: string) => {
+		setSelectedElement(selectedElementId);
+		const [tab] = await chrome.tabs.query({
+			active: true,
+			lastFocusedWindow: true,
+		});
+		if (!tab) {
+			return;
+		}
+		await chrome.tabs.sendMessage(tab.id, {
+			type: "SELECTED_ELEMENT_UPDATED",
+			selectedElementId,
+		});
+	};
+
 	return (
 		<TooltipProvider>
 			<div className="flex flex-col h-screen bg-secondary/20">
@@ -166,7 +181,7 @@ const App: React.FC = () => {
 								<ScrollArea className="flex-1 border rounded-md">
 									<RadioGroup
 										value={selectedElement}
-										onValueChange={setSelectedElement}
+										onValueChange={handleSelectElement}
 										className="p-2 space-y-2"
 									>
 										{blockedElements.map((element) => (
