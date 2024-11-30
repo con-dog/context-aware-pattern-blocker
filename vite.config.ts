@@ -17,6 +17,7 @@ export default defineConfig({
 				popup: path.resolve(__dirname, "popup.html"),
 				"side-panel": path.resolve(__dirname, "side-panel.html"),
 				"service-worker": path.resolve(__dirname, "./src/service-worker.ts"),
+				content: path.resolve(__dirname, "./src/content.ts"),
 			},
 			output: {
 				entryFileNames: "[name].js",
