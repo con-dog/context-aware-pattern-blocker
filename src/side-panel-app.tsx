@@ -81,8 +81,6 @@ const App: React.FC = () => {
 			} catch (error) {
 				response = null;
 			}
-
-			console.log("response", response);
 			if (response?.blockedElements) {
 				setBlockedElements(response.blockedElements);
 			} else {
