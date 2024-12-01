@@ -11,11 +11,6 @@ let oldBackgroundColor = null;
 let oldBoxShadow = null;
 let oldOutlineOffset = null;
 
-const initializePromptAPI = async () => {
-	const availability = await chrome.aiOriginTrial.languageModel.capabilities();
-	console.log("availability", availability);
-};
-
 const messageUtils = {
 	async sendMessage(message) {
 		try {
@@ -216,12 +211,14 @@ function processTextNode(node) {
 	}
 
 	if (modified) {
+		console.log("MODIFIED");
 		node.textContent = text;
 		processedNodes.add(node);
 		messageUtils.sendMessage({
 			type: "BLOCKED_ELEMENTS_UPDATED",
 			blockedElements: getBlockedElements(),
 		});
+		console.log("BLOCKED ELEMENTS UPDATED", getBlockedElements());
 	}
 }
 
@@ -280,8 +277,6 @@ function resetCounter() {
 	blockedElementCountPerRuleId = {};
 	updateBadgeCount();
 }
-
-initializePromptAPI();
 
 const intersectionObserver = new IntersectionObserver(
 	(entries) => {

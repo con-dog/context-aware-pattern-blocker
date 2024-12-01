@@ -22,6 +22,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "./components/ui/tooltip";
+import { NANO_PROMPT_API_SYSTEM_PROMPT } from "./constants";
 import { messageUtils } from "./lib/messaging";
 import { useRulesStore } from "./stores/rules-store";
 import type { BlockMode } from "./types/types";
@@ -42,6 +43,8 @@ const App: React.FC = () => {
 	const [contextScore, setContextScore] = useState([0.5]); // Default to middle value
 	const [blockedElements, setBlockedElements] = useState<BlockedElement[]>([]);
 	const [hasAnalysis, setHasAnalysis] = useState(false);
+	const [promptApPrimarySession, setPromptApiPrimarySession] =
+		useState<any>(null);
 
 	// Simplified values for the slider marks
 	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
@@ -56,6 +59,16 @@ const App: React.FC = () => {
 	};
 
 	useEffect(() => {
+		const initializePromptAPI = async () => {
+			const capabilities =
+				await chrome.aiOriginTrial.languageModel.capabilities();
+			if (capabilities?.available === "readily") {
+				const session = await chrome.aiOriginTrial.languageModel.create({
+					systemPrompt: NANO_PROMPT_API_SYSTEM_PROMPT,
+				});
+				setPromptApiPrimarySession(session);
+			}
+		};
 		messageUtils.addMessageListener(({ type }: { type: string }) => {
 			if (type === "RULES_UPDATED") {
 				loadRules();
@@ -69,6 +82,7 @@ const App: React.FC = () => {
 				}
 			},
 		);
+		initializePromptAPI();
 	}, []);
 
 	useEffect(() => {
@@ -95,6 +109,11 @@ const App: React.FC = () => {
 			type: "SELECTED_ELEMENT_UPDATED",
 			selectedElementId,
 		});
+		const selectedBlockedElement = blockedElements.find(
+			(element) => element.id === selectedElementId,
+		);
+
+		console.log("Selected blocked element:", selectedBlockedElement);
 	};
 
 	return (
@@ -126,7 +145,7 @@ const App: React.FC = () => {
 									<AlertCircle className="w-6 h-6 text-muted-foreground" />
 								</div>
 								<div className="space-y-1 text-center">
-									<h2 className="text-lg font-medium">No rules yet!</h2>
+									<h2 className="text-lg font-medium">No enabled rules!</h2>
 									<p className="text-sm text-muted-foreground">
 										Create your first content blocking rule to get started
 									</p>
@@ -179,7 +198,7 @@ const App: React.FC = () => {
 							{/* Blocked Elements List - Scrollable */}
 							<div className="flex flex-col flex-1 w-full min-h-0 gap-2 px-3">
 								<div className="flex-none py-2 text-sm font-medium">
-									Blocked Elements (mode: Surrounding)
+									Blocked Elements
 								</div>
 								<ScrollArea className="flex-1 border rounded-md">
 									<RadioGroup
