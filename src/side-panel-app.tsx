@@ -324,7 +324,7 @@ const App: React.FC = () => {
 							</div>
 
 							{/* AI Analysis Button - Fixed height */}
-							<div className="flex-none p-3 border-t">
+							<div className="flex-none px-3 my-2 border-t">
 								<Button
 									className="w-full"
 									disabled={!selectedElement}
@@ -338,8 +338,21 @@ const App: React.FC = () => {
 								</Button>
 							</div>
 
+							{/* UNBLOCK BUTTON */}
+							<div className="flex-none px-3 mb-2">
+								<Button
+									className="w-full"
+									variant="outline"
+									onClick={handleUnblockElement}
+									disabled={!selectedElement}
+								>
+									<Eye className="w-4 h-4" />
+									Reveal Text
+								</Button>
+							</div>
+
 							{/* Results card with conditional states */}
-							<div className="flex-none px-3">
+							<div className="flex-none px-3 mb-2">
 								{selectedElement ? (
 									hasAnalysis ? (
 										<Card className="w-full bg-muted/50">
@@ -403,19 +416,6 @@ const App: React.FC = () => {
 										</CardContent>
 									</Card>
 								)}
-							</div>
-
-							{/* UNBLOCK BUTTON */}
-							<div className="flex-none p-3">
-								<Button
-									className="w-full"
-									variant="outline"
-									onClick={handleUnblockElement}
-									disabled={!selectedElement}
-								>
-									<Eye className="w-4 h-4" />
-									Reveal Text
-								</Button>
 							</div>
 						</div>
 					)}
