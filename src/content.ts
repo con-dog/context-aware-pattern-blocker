@@ -2,6 +2,7 @@ let rules = [];
 let totalMatchesBlocked = 0;
 let processedNodes = new WeakSet();
 let blockedElements = new Map();
+let unblockedElementsByUniqueSelector = new WeakSet();
 let blockedElementCountPerRuleId = {};
 // Highlighting
 let highlightedElement: HTMLElement | null = null;
@@ -30,6 +31,39 @@ const messageUtils = {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	if (message.type === "GET_BLOCKED_ELEMENTS") {
 		sendResponse({ blockedElements: getBlockedElements() });
+	}
+	if (message.type === "UNBLOCK_ELEMENT") {
+		const { id } = message;
+		const blockedElement = getBlockedElementById(id);
+		console.log("BLOCKED ELEMENT", blockedElement);
+
+		if (blockedElement) {
+			const { originalText } = blockedElement;
+			const elementRef = document.querySelector(blockedElement.selector);
+			console.log("ELEMENT REF", elementRef);
+
+			if (elementRef) {
+				// Try multiple update approaches
+				elementRef.textContent = originalText;
+				elementRef.innerText = originalText;
+
+				// Force a DOM reflow
+				void elementRef.offsetHeight;
+
+				// Alternative: Use requestAnimationFrame
+				requestAnimationFrame(() => {
+					elementRef.textContent = originalText;
+				});
+
+				// Or try wrapping in setTimeout
+				setTimeout(() => {
+					elementRef.textContent = originalText;
+				}, 0);
+			}
+
+			blockedElements.delete(blockedElement.element);
+			unblockedElementsByUniqueSelector.add(blockedElement.selector);
+		}
 	}
 });
 
@@ -145,6 +179,7 @@ function replaceWithBlocks(text, rule, node) {
 				node.nodeType === Node.TEXT_NODE ? node.parentElement : node;
 			if (elementToTrack) {
 				const uniqueSelector = generateUniqueSelector(elementToTrack);
+				if (unblockedElementsByUniqueSelector.has(uniqueSelector)) return text;
 				if (uniqueSelector) {
 					blockedElements.set(elementToTrack, {
 						id: crypto.randomUUID(),
@@ -280,6 +315,7 @@ function resetCounter() {
 	totalMatchesBlocked = 0;
 	processedNodes = new WeakSet();
 	blockedElements = new Map();
+	unblockedElementsByUniqueSelector = new Set();
 	blockedElementCountPerRuleId = {};
 	updateBadgeCount();
 }

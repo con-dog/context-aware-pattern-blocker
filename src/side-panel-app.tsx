@@ -45,6 +45,7 @@ const App: React.FC = () => {
 	const [hasAnalysis, setHasAnalysis] = useState(false);
 	const [promptApPrimarySession, setPromptApiPrimarySession] =
 		useState<any>(null);
+	const [activeTabId, setActiveTabId] = useState<number | null>(null);
 
 	// Simplified values for the slider marks
 	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
@@ -59,6 +60,17 @@ const App: React.FC = () => {
 	};
 
 	useEffect(() => {
+		const initializeGetActiveTab = async () => {
+			const [tab] = await chrome.tabs.query({
+				active: true,
+				lastFocusedWindow: true,
+			});
+			if (!tab) {
+				return;
+			}
+			setActiveTabId(tab.id);
+		};
+
 		const initializePromptAPI = async () => {
 			const capabilities =
 				await chrome.aiOriginTrial.languageModel.capabilities();
@@ -71,6 +83,7 @@ const App: React.FC = () => {
 		};
 		chrome.tabs.onActivated.addListener(async (activeInfo) => {
 			const tabId = activeInfo.tabId;
+			setActiveTabId(tabId);
 			setSelectedElement("");
 			setHasAnalysis(false);
 			let response;
@@ -87,7 +100,7 @@ const App: React.FC = () => {
 				setBlockedElements([]);
 			}
 		});
-
+		initializeGetActiveTab();
 		messageUtils.addMessageListener(({ type }: { type: string }) => {
 			if (type === "RULES_UPDATED") {
 				loadRules();
@@ -131,8 +144,19 @@ const App: React.FC = () => {
 		const selectedBlockedElement = blockedElements.find(
 			(element) => element.id === selectedElementId,
 		);
+	};
 
-		console.log("Selected blocked element:", selectedBlockedElement);
+	const handleUnblockElement = () => {
+		if (!selectedElement) return;
+		const blockedElement = blockedElements.find(
+			(element) => element.id === selectedElement,
+		);
+		if (!blockedElement) return;
+		if (!activeTabId) return;
+		chrome.tabs.sendMessage(activeTabId, {
+			type: "UNBLOCK_ELEMENT",
+			id: blockedElement.id,
+		});
 	};
 
 	return (
@@ -383,7 +407,12 @@ const App: React.FC = () => {
 
 							{/* UNBLOCK BUTTON */}
 							<div className="flex-none p-3">
-								<Button className="w-full" variant="outline">
+								<Button
+									className="w-full"
+									variant="outline"
+									onClick={handleUnblockElement}
+									disabled={!selectedElement}
+								>
 									<Eye className="w-4 h-4" />
 									Reveal Text
 								</Button>
