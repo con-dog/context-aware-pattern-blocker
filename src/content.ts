@@ -27,6 +27,12 @@ const messageUtils = {
 	},
 };
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+	if (message.type === "GET_BLOCKED_ELEMENTS") {
+		sendResponse({ blockedElements: getBlockedElements() });
+	}
+});
+
 function updateBadgeCount() {
 	chrome.runtime.sendMessage({
 		type: "updateBadge",

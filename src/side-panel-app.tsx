@@ -69,6 +69,27 @@ const App: React.FC = () => {
 				setPromptApiPrimarySession(session);
 			}
 		};
+		chrome.tabs.onActivated.addListener(async (activeInfo) => {
+			const tabId = activeInfo.tabId;
+			setSelectedElement("");
+			setHasAnalysis(false);
+			let response;
+			try {
+				response = await chrome.tabs.sendMessage(tabId, {
+					type: "GET_BLOCKED_ELEMENTS",
+				});
+			} catch (error) {
+				response = null;
+			}
+
+			console.log("response", response);
+			if (response?.blockedElements) {
+				setBlockedElements(response.blockedElements);
+			} else {
+				setBlockedElements([]);
+			}
+		});
+
 		messageUtils.addMessageListener(({ type }: { type: string }) => {
 			if (type === "RULES_UPDATED") {
 				loadRules();
