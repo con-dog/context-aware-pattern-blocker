@@ -3,6 +3,13 @@ let totalMatchesBlocked = 0;
 let processedNodes = new WeakSet();
 let blockedElements = new Map();
 let blockedElementCountPerRuleId = {};
+// Highlighting
+let highlightedElement: HTMLElement | null = null;
+let oldOutline = null;
+let oldPosition = null;
+let oldBackgroundColor = null;
+let oldBoxShadow = null;
+let oldOutlineOffset = null;
 
 const messageUtils = {
 	async sendMessage(message) {
@@ -27,34 +34,36 @@ function updateBadgeCount() {
 	});
 }
 
-function highlightElement(selector) {
-	const elem = document.querySelector(selector);
+function highlightElement(selector: string) {
+	const elem = document.querySelector<HTMLElement>(selector);
 	if (!elem) return;
 
-	const oldOutline = elem.style.outline;
-	const oldPosition = elem.style.position;
-	const oldBackgroundColor = elem.style.backgroundColor;
-	const oldBoxShadow = elem.style.boxShadow;
-	const oldOutlineOffset = elem.style.outlineOffset;
+	// Previous highlight? Remove highlight
+	if (highlightedElement) {
+		highlightedElement.style.outline = oldOutline;
+		highlightedElement.style.position = oldPosition;
+		highlightedElement.style.backgroundColor = oldBackgroundColor;
+		highlightedElement.style.boxShadow = oldBoxShadow;
+		highlightedElement.style.outlineOffset = oldOutlineOffset;
+	}
 
-	elem.style.outline = "2px solid rgba(0, 132, 255, 0.8)";
-	elem.style.outlineOffset = "-1px";
-	elem.style.position = oldPosition === "static" ? "relative" : oldPosition;
-	elem.style.backgroundColor = "rgba(0, 132, 255, 0.1)";
+	highlightedElement = elem;
 
-	elem.style.boxShadow = "0 0 0 3px rgba(0, 132, 255, 0.3)";
-	elem.scrollIntoView({ behavior: "smooth", block: "center" });
-	// focus
-	elem.focus();
+	oldOutline = highlightedElement.style.outline;
+	oldPosition = highlightedElement.style.position;
+	oldBackgroundColor = highlightedElement.style.backgroundColor;
+	oldBoxShadow = highlightedElement.style.boxShadow;
+	oldOutlineOffset = highlightedElement.style.outlineOffset;
 
-	setTimeout(() => {
-		elem.style.outlineOffset = oldOutlineOffset;
-		elem.style.backgroundColor = oldBackgroundColor;
-		elem.style.outline = oldOutline;
-		elem.style.outlineOffset = "";
-		elem.style.boxShadow = oldBoxShadow;
-		elem.style.position = oldPosition;
-	}, 5000);
+	// Apply highlight
+	highlightedElement.style.outline = "2px solid rgba(0, 132, 255, 0.8)";
+	highlightedElement.style.outlineOffset = "-1px";
+	highlightedElement.style.position =
+		oldPosition === "static" ? "relative" : oldPosition;
+	highlightedElement.style.backgroundColor = "rgba(0, 132, 255, 0.1)";
+	highlightedElement.style.boxShadow = "0 0 0 3px rgba(0, 132, 255, 0.3)";
+	highlightedElement.scrollIntoView({ behavior: "smooth", block: "center" });
+	highlightedElement.focus();
 }
 
 messageUtils.addMessageListener((message) => {

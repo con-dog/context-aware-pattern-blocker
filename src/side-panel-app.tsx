@@ -5,6 +5,7 @@ import {
 	ExternalLink,
 	Eye,
 	HelpCircle,
+	MousePointerClick,
 	Shield,
 } from "lucide-react";
 import type React from "react";
@@ -40,6 +41,7 @@ const App: React.FC = () => {
 	const [selectedElement, setSelectedElement] = useState<string>("");
 	const [contextScore, setContextScore] = useState([0.5]); // Default to middle value
 	const [blockedElements, setBlockedElements] = useState<BlockedElement[]>([]);
+	const [hasAnalysis, setHasAnalysis] = useState(false);
 
 	// Simplified values for the slider marks
 	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
@@ -264,40 +266,81 @@ const App: React.FC = () => {
 								<Button
 									className="w-full"
 									disabled={!selectedElement}
-									onClick={() =>
-										console.log("Analyzing element:", selectedElement)
-									}
+									onClick={() => {
+										console.log("Analyzing element:", selectedElement);
+										setHasAnalysis(true);
+									}}
 								>
 									<Brain className="w-4 h-4" />
 									Analyze with AI
 								</Button>
 							</div>
 
+							{/* Results card with conditional states */}
 							<div className="flex-none px-3">
-								<Card className="w-full bg-muted/50">
-									<CardHeader className="py-3">
-										<div className="flex items-center justify-between">
+								{selectedElement ? (
+									hasAnalysis ? (
+										<Card className="w-full bg-muted/50">
+											<CardHeader className="py-3">
+												<div className="flex items-center justify-between">
+													<CardTitle className="text-sm font-medium">
+														Analysis Results
+													</CardTitle>
+													<Badge type="secondary" className="text-xs">
+														0.75 relevance
+													</Badge>
+												</div>
+											</CardHeader>
+											<CardContent className="py-3 space-y-2">
+												<div className="text-sm text-muted-foreground">
+													This content appears to be highly relevant to the
+													blocked context based on surrounding text and semantic
+													analysis.
+												</div>
+												<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
+													<AlertCircle className="w-4 h-4 text-primary" />
+													<span className="text-primary">
+														Recommended: Keep content blocked
+													</span>
+												</div>
+											</CardContent>
+										</Card>
+									) : (
+										<Card className="w-full bg-muted/50">
+											<CardHeader className="py-3">
+												<CardTitle className="text-sm font-medium">
+													Analysis Results
+												</CardTitle>
+											</CardHeader>
+											<CardContent className="py-3">
+												<div className="flex flex-col items-center justify-center gap-2 py-2">
+													<Brain className="w-8 h-8 text-muted-foreground/50" />
+													<div className="text-sm text-center text-muted-foreground">
+														Click "Analyze with AI" to check the relevance of
+														the selected content
+													</div>
+												</div>
+											</CardContent>
+										</Card>
+									)
+								) : (
+									<Card className="w-full bg-muted/50">
+										<CardHeader className="py-3">
 											<CardTitle className="text-sm font-medium">
 												Analysis Results
 											</CardTitle>
-											<Badge type="secondary" className="text-xs">
-												0.75 relevance
-											</Badge>
-										</div>
-									</CardHeader>
-									<CardContent className="py-3 space-y-2">
-										<div className="text-sm text-muted-foreground">
-											This content appears to be highly relevant to the blocked
-											context based on surrounding text and semantic analysis.
-										</div>
-										<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
-											<AlertCircle className="w-4 h-4 text-primary" />
-											<span className="text-primary">
-												Recommended: Keep content blocked
-											</span>
-										</div>
-									</CardContent>
-								</Card>
+										</CardHeader>
+										<CardContent className="py-3">
+											<div className="flex flex-col items-center justify-center gap-2 py-2">
+												<MousePointerClick className="w-8 h-8 text-muted-foreground/50" />
+												<div className="text-sm text-center text-muted-foreground">
+													Select a blocked element to analyze its context
+													relevance
+												</div>
+											</div>
+										</CardContent>
+									</Card>
+								)}
 							</div>
 
 							{/* UNBLOCK BUTTON */}
