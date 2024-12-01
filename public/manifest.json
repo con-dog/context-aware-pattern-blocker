@@ -4,7 +4,17 @@
 	"short_name": "Word Blocker",
 	"version": "1.21",
 	"description": "Redact text on any site. Block words, phrases, or patterns. Categorize rules. Import & export rules. Open source. Privacy focused.",
-	"permissions": ["management", "sidePanel", "storage", "tabs"],
+	"permissions": [
+		"aiLanguageModelOriginTrial",
+		"management",
+		"sidePanel",
+		"storage",
+		"tabs"
+	],
+	"key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1VNXHiMwKVZ5zUKFgYJ6NjC+iVEqO4xd9mcQCgoyXGhpkYIgduGXwCSC7Ov+bH9ISRSG2J2km/n5E9s9IwOKVPWgFHsdBlyE9HvUtAEuO18wSn3iLL/2oFBu6RV2qKm+6rlYQvescQHagDE9+Zp8lyoJnxeqcsDm6qXvmgwVG4RGXkAwDIuGop/spi5Jqy3hVso/iuSVioJAgqb6h2Z50gFsf36Ot+Ju6thr92apngyY0jP59f0IVXTidYBmsmQkznIQ4pz68T+MwboD8rHKJSkwHFXVaP9h/2E5ejdVd5xc8LH3LeMue3soD8SHH78w6eVxFS2486OFcQyOeqFu0wIDAQAB",
+	"trial_tokens": [
+		"AqWKBjL4GYONop8FwUjdvywDcYeGG2lPccwPzVQAC6I7RC/DWdr1FXItSrhnz+e/zRUOZYvOSdj6Pio9IoZUZAwAAAB4eyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vYm5jaWZtZ2lsa2dmcGZpcGFianBvaWNkYXBsZG1paWIiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElGb3JFeHRlbnNpb24iLCJleHBpcnkiOjE3NjA0ODYzOTl9"
+	],
 	"background": {
 		"service_worker": "service-worker.js",
 		"type": "module"

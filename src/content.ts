@@ -11,6 +11,11 @@ let oldBackgroundColor = null;
 let oldBoxShadow = null;
 let oldOutlineOffset = null;
 
+const initializePromptAPI = async () => {
+	const availability = await chrome.aiOriginTrial.languageModel.capabilities();
+	console.log("availability", availability);
+};
+
 const messageUtils = {
 	async sendMessage(message) {
 		try {
@@ -275,6 +280,8 @@ function resetCounter() {
 	blockedElementCountPerRuleId = {};
 	updateBadgeCount();
 }
+
+initializePromptAPI();
 
 const intersectionObserver = new IntersectionObserver(
 	(entries) => {
