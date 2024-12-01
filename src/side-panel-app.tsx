@@ -4,8 +4,11 @@ import {
 	ExternalLink,
 	Eye,
 	HelpCircle,
+	Loader2,
 	MousePointerClick,
+	RefreshCcw,
 	Shield,
+	XCircle,
 } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
@@ -46,6 +49,8 @@ const App: React.FC = () => {
 	const [promptApPrimarySession, setPromptApiPrimarySession] =
 		useState<any>(null);
 	const [activeTabId, setActiveTabId] = useState<number | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState(null);
 
 	// Simplified values for the slider marks
 	const sliderMarks = [0, 0.25, 0.5, 0.75, 1];
@@ -182,27 +187,37 @@ const App: React.FC = () => {
 		const newSession = await promptApPrimarySession.clone({
 			signal: controller.signal,
 		});
-		const response = await newSession.prompt(prompt);
-		setHasAnalysis(true);
-		let output = null;
-		let contextScores: object | null = null;
+		setIsLoading(true);
+		setError(null);
 		try {
-			output = JSON.parse(response);
-		} catch (error) {
-			output = null;
-			contextScores = null;
-		}
-		if (output) {
-			contextScores = output.context_scores;
-		}
-		if (contextScores) {
-			const maxScore = Math.max(...Object.values(contextScores));
-			if (maxScore <= contextScore[0]) {
-				setUnblockSafe(true);
-				return;
+			const response = await newSession.prompt(prompt);
+			setHasAnalysis(true);
+			let output = null;
+			let contextScores: object | null = null;
+			try {
+				output = JSON.parse(response);
+			} catch (error) {
+				output = null;
+				contextScores = null;
 			}
+			if (output) {
+				contextScores = output.context_scores;
+			}
+			if (contextScores) {
+				const maxScore = Math.max(...Object.values(contextScores));
+				if (maxScore <= contextScore[0]) {
+					setUnblockSafe(true);
+					return;
+				}
+			}
+		} catch (err) {
+			setError(err);
+			setHasAnalysis(false);
+		} finally {
+			setIsLoading(false);
+			setUnblockSafe(false);
+			controller.abort();
 		}
-		setUnblockSafe(false);
 	};
 
 	return (
@@ -394,10 +409,61 @@ const App: React.FC = () => {
 								</Button>
 							</div>
 
-							{/* Results card with conditional states */}
+							{/* Results card with all states including error */}
 							<div className="flex-none px-3 mb-2">
 								{selectedElement ? (
-									hasAnalysis ? (
+									isLoading ? (
+										<Card className="w-full bg-muted/50">
+											<CardHeader className="py-3">
+												<CardTitle className="text-sm font-medium">
+													Analysis Results
+												</CardTitle>
+											</CardHeader>
+											<CardContent className="py-3">
+												<div className="flex flex-col items-center justify-center gap-3 py-2">
+													<div className="relative">
+														<Brain className="w-8 h-8 text-muted-foreground/50" />
+														<div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+															<Loader2 className="w-8 h-8 text-primary animate-spin" />
+														</div>
+													</div>
+													<div className="text-sm text-center text-muted-foreground">
+														Analyzing content relevance...
+													</div>
+												</div>
+											</CardContent>
+										</Card>
+									) : error ? (
+										<Card className="w-full bg-muted/50">
+											<CardHeader className="py-3">
+												<CardTitle className="text-sm font-medium">
+													Analysis Results
+												</CardTitle>
+											</CardHeader>
+											<CardContent className="py-3">
+												<div className="flex flex-col items-center justify-center gap-3 py-2">
+													<div className="flex flex-col items-center gap-2">
+														<XCircle className="w-8 h-8 text-destructive/70" />
+														<div className="text-sm text-center text-muted-foreground">
+															Unable to analyze content. Please try again.
+														</div>
+													</div>
+													<Button
+														variant="outline"
+														size="sm"
+														className="mt-2"
+														onClick={() => {
+															setError(null);
+															handleAnalyzeWithAI();
+														}}
+													>
+														<RefreshCcw className="w-4 h-4 mr-2" />
+														Retry Analysis
+													</Button>
+												</div>
+											</CardContent>
+										</Card>
+									) : hasAnalysis ? (
 										<Card className="w-full bg-muted/50">
 											<CardHeader className="py-3">
 												<div className="flex items-center justify-between">
