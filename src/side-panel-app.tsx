@@ -1,6 +1,5 @@
 import {
 	AlertCircle,
-	Badge,
 	Brain,
 	ExternalLink,
 	Eye,
@@ -43,6 +42,7 @@ const App: React.FC = () => {
 	const [contextScore, setContextScore] = useState([0.5]); // Default to middle value
 	const [blockedElements, setBlockedElements] = useState<BlockedElement[]>([]);
 	const [hasAnalysis, setHasAnalysis] = useState(false);
+	const [unblockSafe, setUnblockSafe] = useState(false);
 	const [promptApPrimarySession, setPromptApiPrimarySession] =
 		useState<any>(null);
 	const [activeTabId, setActiveTabId] = useState<number | null>(null);
@@ -157,6 +157,52 @@ const App: React.FC = () => {
 			type: "UNBLOCK_ELEMENT",
 			id: blockedElement.id,
 		});
+	};
+
+	const generateLLMPrompt = (blockedElement: BlockedElement) => {
+		const sentence = blockedElement.originalText;
+		const contexts = blockedElement.contexts;
+		const promptJson = {
+			sentence,
+			contexts,
+		};
+		const stringifiedPrompt = JSON.stringify(promptJson);
+		return stringifiedPrompt;
+	};
+
+	const handleAnalyzeWithAI = async () => {
+		if (!selectedElement) return;
+		const blockedElement = blockedElements.find(
+			(element) => element.id === selectedElement,
+		);
+		if (!blockedElement || !blockedElement.contexts.length) return;
+		if (!promptApPrimarySession) return;
+		const prompt = generateLLMPrompt(blockedElement);
+		const controller = new AbortController();
+		const newSession = await promptApPrimarySession.clone({
+			signal: controller.signal,
+		});
+		const response = await newSession.prompt(prompt);
+		setHasAnalysis(true);
+		let output = null;
+		let contextScores: object | null = null;
+		try {
+			output = JSON.parse(response);
+		} catch (error) {
+			output = null;
+			contextScores = null;
+		}
+		if (output) {
+			contextScores = output.context_scores;
+		}
+		if (contextScores) {
+			const maxScore = Math.max(...Object.values(contextScores));
+			if (maxScore <= contextScore[0]) {
+				setUnblockSafe(true);
+				return;
+			}
+		}
+		setUnblockSafe(false);
 	};
 
 	return (
@@ -328,10 +374,7 @@ const App: React.FC = () => {
 								<Button
 									className="w-full"
 									disabled={!selectedElement}
-									onClick={() => {
-										console.log("Analyzing element:", selectedElement);
-										setHasAnalysis(true);
-									}}
+									onClick={handleAnalyzeWithAI}
 								>
 									<Brain className="w-4 h-4" />
 									Analyze with AI
@@ -361,21 +404,21 @@ const App: React.FC = () => {
 													<CardTitle className="text-sm font-medium">
 														Analysis Results
 													</CardTitle>
-													<Badge type="secondary" className="text-xs">
-														0.75 relevance
-													</Badge>
 												</div>
 											</CardHeader>
 											<CardContent className="py-3 space-y-2">
 												<div className="text-sm text-muted-foreground">
-													This content appears to be highly relevant to the
-													blocked context based on surrounding text and semantic
-													analysis.
+													{unblockSafe
+														? "This content does not appear to be relevant to the blocked context based on surrounding text analysis."
+														: "This content appears to be relevant to the blocked context based on surrounding text analysis."}
 												</div>
 												<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
 													<AlertCircle className="w-4 h-4 text-primary" />
 													<span className="text-primary">
-														Recommended: Keep content blocked
+														Recommended:{" "}
+														{unblockSafe
+															? "Unblock content"
+															: "Keep content blocked"}
 													</span>
 												</div>
 											</CardContent>
