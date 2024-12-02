@@ -64,6 +64,8 @@ const App: React.FC = () => {
 		"1.00": "Explicitly about this context",
 	};
 
+	const getBlockedElements = async (tabId) => {};
+
 	useEffect(() => {
 		const initializeGetActiveTab = async () => {
 			const [tab] = await chrome.tabs.query({
@@ -74,6 +76,19 @@ const App: React.FC = () => {
 				return;
 			}
 			setActiveTabId(tab.id);
+			let response;
+			try {
+				response = await chrome.tabs.sendMessage(tab.id, {
+					type: "GET_BLOCKED_ELEMENTS",
+				});
+			} catch (error) {
+				response = null;
+			}
+			if (response?.blockedElements) {
+				setBlockedElements(response.blockedElements);
+			} else {
+				setBlockedElements([]);
+			}
 		};
 
 		const initializePromptAPI = async () => {
@@ -120,6 +135,7 @@ const App: React.FC = () => {
 			},
 		);
 		initializePromptAPI();
+		initializeGetActiveTab();
 	}, []);
 
 	useEffect(() => {
