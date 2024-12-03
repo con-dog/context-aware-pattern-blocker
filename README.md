@@ -65,6 +65,7 @@ After blocking surrounding text:
 4. Open Chrome and navigate to `chrome://extensions`
 5. Enable "Developer mode"
 6. Click "Load unpacked" and select the `dist` directory containing the built extension
+7. You must additionally follow the instructions in this guide https://developer.chrome.com/docs/extensions/ai/prompt-api to enable the AI Prompt API in your browser. Without the AI model download, the AI features will not work.
 
 ## Usage 💡
 
