@@ -1,4 +1,4 @@
-# Context Aware Word & Phrase Blocker 🛡️
+# Context Aware Word & Phrase Blocker (Extension) 🛡️
 
 An intelligent Chrome extension that filters online content using powerful context-aware rules and AI.
 
@@ -13,6 +13,10 @@ Unlike traditional content blockers, this extension understands context - knowin
 - **AI-Powered Analysis**: Uses Gemini Nano to intelligently analyze blocked content for safe unblocking
 - **Advanced Regex Support**: Create sophisticated filtering rules with regex and real-time syntax highlighting
 - **Real-time Protection**: Blocks unwanted content instantly as you browse
+
+## API Used 🧠
+
+- [Prompt API Cin Chrome Extensions](https://developer.chrome.com/docs/extensions/ai/prompt-api)
 
 ## Installation 🚀
 1. Clone this repository
@@ -34,6 +38,7 @@ Unlike traditional content blockers, this extension understands context - knowin
 ## Technical Details 🔧
 
 - Built with Chrome Extension Manifest V3
+- React/TypeScript/Shadcn
 - Uses Chrome's built-in Gemini Nano AI model
 - Complex architecture coordinating:
   - Popup interface
