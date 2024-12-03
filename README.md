@@ -155,6 +155,75 @@ The development evolved through four major iterations:
 
 The final architecture involves careful coordination between the popup, sidepanel, extension homepage, content scripts, and service worker - all working together to provide seamless content filtering.
 
+## The System Prompt I settled on, to allow the AI to analyze blocked content and determine if it's safe to unblock
+```javascript
+Score how strongly a sentence connects to given contexts.
+
+Scoring:
+1.00 = Explicitly about this context (e.g., "whiskey" -> alcohol)
+0.75 = Direct reference but not main focus
+0.50 = Clear but secondary/metaphorical connection
+0.25 = Requires inference to connect
+0.00 = No connection (don't force it)
+
+Return format stringified JSON:
+{
+    "context_scores": <context: score>,
+    "explanation": <one sentence>
+}
+
+Key rules:
+- Weigh each context in isolation against the sentence
+
+You will receive inputs in stringified JSON format:
+{
+    "sentence": "single sentence to analyze",
+    "contexts": ["context1", "context2", "context3"]
+}
+```
+
+### Test Input 1
+```json
+let result = await session.prompt(`{
+    "sentence": "The children played in the backyard until sunset.",
+    "contexts": ["education", "health", "family"]
+}`)
+```
+
+LLM Response
+```json
+{
+    "context_scores": {
+        "education": 0,
+        "health": 0,
+        "family": 0.5
+    },
+    "explanation": "The sentence describes children playing outside, which is a typical family activity."
+}
+```
+
+Cool! I can basically parse the response as JSON, get the max content scores (and compare it to the users context score slider) and tell the user its safe/unsafe to unblock content based on the results. If we need any debugging, in the future we could show the user the explanation. But for now, its only accessible via the console.
+
+Test Input 2
+```json
+result = await session.prompt(`{
+    "sentence": "The flowers bloomed early this spring.",
+    "contexts": ["environment", "science", "agriculture"]
+}`)
+```
+
+LLM Response:
+```json
+{
+    "context_scores": {
+        "environment": 1,
+        "science": 0.25,
+        "agriculture": 0.75
+    },
+    "explanation": "The sentence describes a natural phenomenon related to the environment (early blooming) and is supported by scientific knowledge of plant growth."
+}
+```
+
 ## Challenges I ran into
 - Optimizing model performance and response time for real-time content analysis.
 - Found the model could not handle "lots of hits" eg: if there were many "hits" for blocked content on a page, the model could not reliably give the content a relevancy score based on the users rules contexts.
