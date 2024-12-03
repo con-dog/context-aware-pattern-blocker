@@ -22,6 +22,11 @@ Before blocking:
 
 ![Before](./0__screenshots__0/Gambling%20unblocked.png)
 ---
+
+Add gambling rule in the extension:
+
+![Add gambling rule](./0__screenshots__0/Gambling%20rule.png)
+---
 After blocking exact matches:
 
 ![After blocking exact matches](./0__screenshots__0/Gambling%20partial%20block.png)
