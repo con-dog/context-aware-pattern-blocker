@@ -203,8 +203,6 @@ If you find this project helpful, please give it a ⭐️ on GitHub and consider
 ---
 ![Creating a rule](./0__screenshots__0/Create%20a%20rule%20view%20example.png)
 
-![Screenshot of extension blocking gambling content](./0__screenshots__0/Shooting%203.png)
-
 ---
 
 *Built with ❤️ for a better browsing experience*
