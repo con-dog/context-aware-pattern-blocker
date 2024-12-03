@@ -64,8 +64,6 @@ const App: React.FC = () => {
 		"1.00": "Explicitly about this context",
 	};
 
-	const getBlockedElements = async (tabId) => {};
-
 	useEffect(() => {
 		const initializeGetActiveTab = async () => {
 			const [tab] = await chrome.tabs.query({
@@ -219,9 +217,11 @@ const App: React.FC = () => {
 			if (output) {
 				contextScores = output.context_scores;
 			}
+			console.log("Output from AI model:", output);
 			if (contextScores) {
 				const maxScore = Math.max(...Object.values(contextScores));
 				if (maxScore <= contextScore[0]) {
+					console.log("Unblock safe");
 					setUnblockSafe(true);
 					return;
 				}
@@ -229,9 +229,9 @@ const App: React.FC = () => {
 		} catch (err) {
 			setError(err);
 			setHasAnalysis(false);
+			setUnblockSafe(false);
 		} finally {
 			setIsLoading(false);
-			setUnblockSafe(false);
 			controller.abort();
 		}
 	};
@@ -488,22 +488,33 @@ const App: React.FC = () => {
 													</CardTitle>
 												</div>
 											</CardHeader>
-											<CardContent className="py-3 space-y-2">
-												<div className="text-sm text-muted-foreground">
-													{unblockSafe
-														? "This content does not appear to be relevant to the blocked context based on surrounding text analysis."
-														: "This content appears to be relevant to the blocked context based on surrounding text analysis."}
-												</div>
-												<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
-													<AlertCircle className="w-4 h-4 text-primary" />
-													<span className="text-primary">
-														Recommended:{" "}
-														{unblockSafe
-															? "Unblock content"
-															: "Keep content blocked"}
-													</span>
-												</div>
-											</CardContent>
+											{unblockSafe ? (
+												<CardContent className="py-3 space-y-2">
+													<div className="text-sm text-muted-foreground">
+														This content does not appear to be relevant to the
+														blocked context based on surrounding text analysis.
+													</div>
+													<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
+														<AlertCircle className="w-4 h-4 text-primary" />
+														<span className="text-primary">
+															Recommended: Unblock content
+														</span>
+													</div>
+												</CardContent>
+											) : (
+												<CardContent className="py-3 space-y-2">
+													<div className="text-sm text-muted-foreground">
+														This content appears to be relevant to the blocked
+														context based on surrounding text analysis.
+													</div>
+													<div className="flex items-center gap-2 p-2 text-sm rounded-md bg-primary/10">
+														<AlertCircle className="w-4 h-4 text-primary" />
+														<span className="text-primary">
+															Recommended: Keep content blocked
+														</span>
+													</div>
+												</CardContent>
+											)}
 										</Card>
 									) : (
 										<Card className="w-full bg-muted/50">
