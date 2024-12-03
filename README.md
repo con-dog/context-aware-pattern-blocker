@@ -33,11 +33,11 @@ After blocking surrounding text:
 
 ## 2) Using AI to unblock content "Shooting" in a basketball context
 
-1) First line blocking kicks in straight away on keyword "Shooting":
+1) First line blocking kicks in straight away on keyword "Shooting". In this view, you see a webpage and the extensions SidePanel:
 
 ![Before](./0__screenshots__0/Shooting%201.png)
 
-2) User selects blocked content and clicks "Analyze with AI" - the AI recommends its safe to unblock:
+2) User selects blocked content via SidePanel and clicks "Analyze with AI" - the AI recommends its safe to unblock:
 
 ![Before](./0__screenshots__0/Shooting%202.png)
 
